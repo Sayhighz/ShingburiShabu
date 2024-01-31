@@ -1,16 +1,16 @@
 import mysql from 'mysql'
 
-const con=mysql.createConnection({
-    host:"th260.ruk-com.in.th",
-    user:"shingbur_spushabu",
+const con = mysql.createConnection({
+    host: "th260.ruk-com.in.th",
+    user: "shingbur_spushabu",
     password: "PCUcKMRwsw26K3KBsVHS",
-    database:"shingbur_spu"
+    database: "shingbur_spu"
 })
 
-con.connect(function(err){
-    if(err){
+con.connect(function (err) {
+    if (err) {
         console.log("connection error")
-    }else{
+    } else {
         console.log("Connected")
     }
 })

@@ -13,6 +13,6 @@ app.use(express.json())
 app.use('/auth', adminRouter)
 
 
-app.listen(3000, () =>{
-    console.log("Server in running")
+app.listen(5000, () =>{
+    console.log("Server is running")
 })

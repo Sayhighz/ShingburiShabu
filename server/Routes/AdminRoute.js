@@ -20,4 +20,13 @@ router.post('/adminlogin', (req, res) => {
     })
 })
 
+router.get('/books', (req,res) =>{ 
+    const sql = "SELECT * FROM books"
+    con.query(sql, (err,data) =>{
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+}
+)
+
 export { router as adminRouter }
