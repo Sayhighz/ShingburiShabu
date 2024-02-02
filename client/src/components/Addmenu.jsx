@@ -63,9 +63,9 @@ function Addmenu() {
               // onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}
             /> */}
 
-            <select className="form-label p-3" type='text' id='inputType'
+            <select className="select select-bordered w-full max-w-xs" type='text' id='inputType'
             onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}>
-              <option disabled selected>Pick your favorite Simpson</option>
+              <option disabled selected>ประเภท</option>
               <option>ของหวาน</option>
               <option>ของคาว</option>
             </select>

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.1",
+    "@trendmicro/react-sidenav": "^0.5.0",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",

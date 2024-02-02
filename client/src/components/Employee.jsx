@@ -70,8 +70,8 @@ function Employee() {
                   <td>{e.email}</td>
                   <td>{e.role}</td>
                   <td>
-                    <Link to={`/dashboard/edit_employee/` + e.id} className='btn btn-warning btn-sm'>Edit</Link>
-                    <button className='btn btn-error btn-sm' onClick={() => handleDelete(e.id)} >Delete</button>
+                    <Link to={`/dashboard/edit_employee/` + e.id} className='btn btn-outline btn-warning m-3'>Edit</Link>
+                    <button className='btn btn-outline btn-error m-3' onClick={() => handleDelete(e.id)} >Delete</button>
                   </td>
                 </tr>
               ))

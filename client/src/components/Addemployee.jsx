@@ -51,12 +51,12 @@ function Addemployee() {
     <>
       <h4 className='text-3xl font-bold text-center text-white p-10'>เพิ่มพนักงาน</h4>
       <div className='flex justify-center items-center'>
-        <div className='p-3 rounded-box w-35 h-50 shadow-xl'>
+        <div className='p-3 rounded-box  w-35 h-50 shadow-xl'>
           <form className='join join-vertical' onSubmit={handleSubmit}>
             <label for="inputEmail" className='form-label'>
               Email
             </label>
-            <input type="text" className='input input-bordered w-full max-w-xs' id='inputEmail'
+            <input type="email" className='input input-bordered w-full max-w-xs' id='inputEmail'
               autoComplete='off'
               placeholder='Enter Email'
               onChange={(e) => setEmployee1({ ...employee1, email: e.target.value })}
@@ -73,12 +73,18 @@ function Addemployee() {
             <label for="inputRole" className='form-label p-3'>
               Role
             </label>
-            <input type="text" className='input input-bordered w-full max-w-xs'
+            <select required className="select select-bordered w-full max-w-xs" type='text' id='inputRole'
+              onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}>
+              <option disabled selected></option>
+              <option>admin</option>
+              <option>visitor</option>
+            </select>
+            {/* <input type="text" className='input input-bordered w-full max-w-xs'
               autoComplete='off'
               id='inputRole'
               placeholder='Enter Role'
               onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}
-            />
+            /> */}
             <div className='flex justify-center p-5'>
               <button type='submit' className='btn btn-outline btn-accent'>เพิ่มพนักงาน</button>
             </div>

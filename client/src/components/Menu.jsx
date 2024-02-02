@@ -84,12 +84,16 @@ function Menu() {
                   menukub.map(m => (
                     <tr>
                        <td>{m.name}</td>
-                       <td><img src={`http://localhost:3000/Images/`+m.image} alt="" className='menuimage'/></td>
+                        <td>
+                          <div className='mask mask-squircle w-12 h-12'>
+                            <img src={`http://localhost:3000/Images/`+m.image} alt="" className='menuimage'/>
+                          </div>
+                        </td>
                        <td>{m.type}</td>
                        <td>{m.price}</td>
                        <td>
-                        <Link to={`/dashboard/edit_menu/`+m.id} className='btn btn-info btn-sm'>Edit</Link>
-                        <button className='btn btn-warning btn-sm' onClick={() => handleDelete(m.id)} >Delete</button>
+                        <Link to={`/dashboard/edit_menu/`+m.id} className='btn btn-outline btn-warning m-3'>Edit</Link>
+                        <button className='btn btn-outline btn-error m-3' onClick={() => handleDelete(m.id)} >Delete</button>
                        </td>
                     </tr>
                   ))

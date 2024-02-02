@@ -60,11 +60,17 @@ function Edit_menu() {
         <label for="inputType" className='form-label p-3'>
           ประเภท
         </label>
-        <input type="text" className='input input-bordered w-full max-w-xs'
+        {/* <input type="text" className='input input-bordered w-full max-w-xs'
           id='inputType'
           value={menukub.type}
           onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}
-        />
+        /> */}
+          <select className="select select-bordered w-full max-w-xs" type='text' id='inputType'
+            onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}>
+              <option disabled selected>ประเภท</option>
+              <option>ของหวาน</option>
+              <option>ของคาว</option>
+            </select>        
         <div className='flex justify-center'>
           <button type='submit' className='btn btn-outline btn-warning'>แก้ไข</button>
         </div>
