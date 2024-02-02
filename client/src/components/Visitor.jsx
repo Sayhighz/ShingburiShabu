@@ -2,7 +2,7 @@ import React from 'react'
 
 function Visitor() {
   return (
-    <div>Visitor</div>
+    <div>หวัดดีจ้าาาาา</div>
   )
 }
 

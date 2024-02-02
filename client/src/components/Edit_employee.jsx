@@ -41,21 +41,21 @@ function Edit_employee() {
     <div className='flex justify-center items-center'>
     <div className='p-3 rounded-box w-35 h-50 border'>
       <form className='join join-vertical' onSubmit={handleSubmit}>
-        <label for="inputName" className='form-label'>
+        <label for="inputEmail" className='form-label'>
           Email
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs' 
-        id='inputName' 
-        placeholder='Enter Name'
+        id='inputEmail' 
+        placeholder='Edit Email'
         value={employee1.email}
           onChange={(e) => setEmployee1({ ...employee1, email: e.target.value })}
         />
-        <label for="inputPrice" className='form-label p-3'>
+        <label for="inputPassword" className='form-label p-3'>
           Password
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs'
-          id='inputPrice'
-          placeholder='Enter Price'
+          id='inputPassword'
+          placeholder='Edit Password'
           value={employee1.password}
           onChange={(e) => setEmployee1({ ...employee1, password: e.target.value })}
         />
@@ -65,6 +65,7 @@ function Edit_employee() {
         <input type="text" className='input input-bordered w-full max-w-xs'
           id='inputType'
           value={employee1.role}
+          placeholder='Edit Role'
           onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}
         />
         <div className='flex justify-center'>

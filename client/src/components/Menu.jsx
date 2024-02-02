@@ -35,7 +35,7 @@ function Menu() {
       </div>
       <div className='flex items-center overflow-x-auto'>
       <table className='table table-zebra m-5'>
-            <thead className='text-white text-center'>
+            <thead className='text-white'>
               <th>Name:</th>
               <th>Image:</th>
               <th>Type:</th>

@@ -34,8 +34,9 @@ function Employee() {
     </div>
     <div className='flex items-center overflow-x-auto' >
     <table className='table table-zebra m-5'>
-          <thead className='text-white text-center'>
+          <thead className='text-white '>
             <th>Email:</th>
+            <th>Role:</th>
             <th>Action:</th>
           </thead>
           <tbody className='text-white'>
