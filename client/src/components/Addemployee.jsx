@@ -76,7 +76,7 @@ function Addemployee() {
             <input type="text" className='input input-bordered w-full max-w-xs'
               autoComplete='off'
               id='inputRole'
-              placeholder='Enter Type'
+              placeholder='Enter Role'
               onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}
             />
             <div className='flex justify-center p-5'>
