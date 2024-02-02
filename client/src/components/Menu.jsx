@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Menu() {
   const [menukub, setMenukub] = useState([])
@@ -17,16 +18,52 @@ function Menu() {
     }).catch(err => console.log(err))
   }, [])
 
-  const handleDelete = (id) =>{
-    axios.delete('http://localhost:3000/auth/delete_menu/'+id)
-    .then(result => {
-      if (result.data.Status){
-          window.location.reload()
-      }else{
-        alert(result.data.Error)
+  // const handleDelete = (id) =>{
+  //   axios.delete('http://localhost:3000/auth/delete_menu/'+id)
+  //   .then(result => {
+  //     if (result.data.Status){
+  //         window.location.reload()
+  //     }else{
+  //       alert(result.data.Error)
+  //     }
+  //   })
+  // }
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'คุณต้องการลบเมนูนี้ใช่หรือไม่?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ใช่, ลบ!',
+      cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete('http://localhost:3000/auth/delete_menu/'+id)
+          .then(result => {
+            if (result.data.Status) {
+              Swal.fire(
+                'ลบข้อมูลเรียบร้อย!',
+                '',
+                'Success'
+              );
+              window.location.reload();
+            } else {
+              Swal.fire(
+                'เกิดข้อผิดพลาด!',
+                result.data.Error,
+                'error'
+              );
+            }
+          })
+          .catch(error => {
+            console.error("เกิดข้อผิดพลาดในการลบข้อมูล:", error);
+          });
       }
-    })
-  }
+    });
+  };
+  
 
   return (
     <div className='text-black container mx-auto'>
