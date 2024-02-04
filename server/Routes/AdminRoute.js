@@ -72,6 +72,18 @@ router.post('/add_menu', upload.single('image'), (req, res) => {
     })
 })
 
+router.get('/order', (req, res) => {
+    const tableNo = req.query.tableNo || 1;
+    const sql = `
+    SELECT * FROM \`order\`
+    INNER JOIN menu ON \`order\`.food_no = menu.id
+    WHERE table_no = ${tableNo}
+  `;
+    con.query(sql, (err, result) => {
+        if (err) return res.json({ Status: false, Error: err.message })
+        return res.json({ Status: true, Result: result })
+    })
+})
 
 router.get('/menu', (req, res) => {
     const sql = "SELECT * FROM menu"

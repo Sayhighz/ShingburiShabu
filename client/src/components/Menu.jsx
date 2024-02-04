@@ -70,9 +70,9 @@ function Menu() {
       <div className='flex justify-center'>
       <h4 className='text-3xl font-bold text-center text-white p-10'>จัดการเมนู</h4>
       </div>
-      <div className='flex items-center overflow-x-auto'>
-      <table className='table table-zebra m-5'>
-            <thead className='text-white'>
+      <div className='flex items-center overflow-y-auto'>
+      <table className='table table-xs table-pin-rows table-pin-cols table-zebra m-5'>
+            <thead className='text-white bg-base-100'>
               <th>Name:</th>
               <th>Image:</th>
               <th>Type:</th>
