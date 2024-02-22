@@ -23,10 +23,13 @@ function App() {
     <BrowserRouter>
       <Routes> 
         <Route path='/adminlogin' element={<Login/>}></Route>
-        <Route path='/visitor' element={<Visitor/>}></Route>
+        {/* <Route path='/visitor' element={<Visitor/>}></Route> */}
+        <Route path='/visitor' element={<VisitorDashBoard/>}>
+            <Route path='' element={<VisitorHome/>}></Route>
+            <Route path='/visitor/order' element={<Order/>}></Route>
+            </Route>
         <Route path='/dashboard' element={<Dashboard/>}>
         <Route path='' element={<Home/>}></Route>
-        
         <Route path='/dashboard/menu' element={<Menu/>}></Route>
         <Route path='/dashboard/employee' element={<Employee/>}></Route>
         <Route path='/dashboard/category' element={<Category/>}></Route>
@@ -39,10 +42,10 @@ function App() {
         <Route path='/dashboard/add_employee' element={<Addemployee/>}></Route>
         </Route>
         
-        <Route path='/visitor' element={<VisitorDashBoard/>}>
+        {/* <Route path='/visitor' element={<VisitorDashBoard/>}>
             <Route path='' element={<VisitorHome/>}></Route>
             <Route path='/visitor/order' element={<Order/>}></Route>
-            </Route>
+            </Route> */}
             
         </Routes>  
     </BrowserRouter>
