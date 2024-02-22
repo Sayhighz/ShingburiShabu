@@ -21,7 +21,7 @@ function Login() {
                     if (role === 'admin') {
                         navigate('/dashboard')
                     } else if (role === 'visitor'){
-                        navigate('/visitor');
+                        navigate('/visitor/');
                     }else{
                         navigate('/adminlogin');
                         alert("ํYou don't have permission")
