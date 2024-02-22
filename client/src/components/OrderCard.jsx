@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function orderCard(props) {
+function OrderCard(props) {
   const [cardText] = useState(props.cardText);
   const [cardColor, setCardColor] = useState("bg-green-500");
   const [tableNo] = useState(props.tableNo);
@@ -30,11 +30,15 @@ function orderCard(props) {
 
     fetchOrder();
   }, [tableNo]);
+
   const totalAmount = orderkub.reduce(
     (total, item) => total + item.price * item.food_amount,
     0
   );
+
   const changeAmount = amountPaid - totalAmount;
+
+
   return (
     <>
       <div className={`card w-60 shadow-xl ${cardColor} text-white m-10`}>
@@ -115,6 +119,7 @@ function orderCard(props) {
                 <button className="btn btn-outline btn-success m-2">
                   เช็คบิล
                 </button>
+
                 <button className="btn btn-outline btn-warning m-2">
                   ย้ายโต๊ะ
                 </button>
@@ -127,4 +132,4 @@ function orderCard(props) {
   );
 }
 
-export default orderCard;
+export default OrderCard;

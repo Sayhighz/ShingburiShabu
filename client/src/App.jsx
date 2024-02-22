@@ -16,6 +16,7 @@ import Edit_employee from './components/Edit_employee'
 import VisitorDashBoard from './components/VisitorDashBoard' 
 import VisitorHome from './components/VisitorHome'
 import Order from './components/Order'
+import Test from './components/test'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/visitor' element={<VisitorDashBoard/>}>
             <Route path='' element={<VisitorHome/>}></Route>
             <Route path='/visitor/order' element={<Order/>}></Route>
+            <Route path='/visitor/test' element={<Test/>}></Route>
             </Route>
         <Route path='/dashboard' element={<Dashboard/>}>
         <Route path='' element={<Home/>}></Route>
