@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Test() {
+function Test2() {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null); // State สำหรับเก็บข้อมูลโต๊ะที่ถูกเลือก
 
@@ -96,4 +96,4 @@ function Test() {
   );
 }
 
-export default Test;
+export default Test2;

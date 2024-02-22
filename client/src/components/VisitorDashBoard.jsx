@@ -121,6 +121,18 @@ const VisitorDashBoard = () => {
                 </Link>
               </li>
             </ul>
+            <ul className="menu">
+               <li className="py-2 flex cursor-pointer mx-5">
+                <Link className="text-gray-700" to="/visitor/test2">
+                  <div className="flex">
+                    <EnvelopeIcon width={18} className="text-gray-600 mr-3" />
+                    <div className="text-gray-700 hidden sm:block hidden sm:block">
+                      test2
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            </ul>
           </div>
           <div className="border-b text-sm">
             <ul>

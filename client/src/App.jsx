@@ -17,6 +17,7 @@ import VisitorDashBoard from './components/VisitorDashBoard'
 import VisitorHome from './components/VisitorHome'
 import Order from './components/Order'
 import Test from './components/test'
+import Test2 from './components/Test2'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
             <Route path='' element={<VisitorHome/>}></Route>
             <Route path='/visitor/order' element={<Order/>}></Route>
             <Route path='/visitor/test' element={<Test/>}></Route>
+            <Route path='/visitor/test2' element={<Test2/>}></Route>
             </Route>
         <Route path='/dashboard' element={<Dashboard/>}>
         <Route path='' element={<Home/>}></Route>
