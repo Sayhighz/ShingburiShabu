@@ -10,11 +10,11 @@ import {
   PowerIcon,
 } from "@heroicons/react/20/solid";
 
-const Dashboard = () => {
+const VisitorDashBoard = () => {
   const menu1 = [
     {
       name: "Dashboard",
-      path: "/dashboard",
+      path: "visitor/dashboard",
       icon: <HomeModernIcon width={18} className="text-gray-600" />,
       isActive: true,
     },
@@ -33,7 +33,7 @@ const Dashboard = () => {
     },
     {
       name: "Booking",
-      path: "/dashboard/booking",
+      path: "/visitor/dashboard/order",
       icon: <EnvelopeIcon width={18} className="text-gray-600" />,
     },
     {
@@ -43,13 +43,13 @@ const Dashboard = () => {
     },
   ];
 
-  const anvigate = useNavigate();
+  const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
     axios.get("http://localhost:3000/auth/logout").then((result) => {
       if (result.data.Status) {
-        anvigate("/adminlogin");
+        navigate("/adminlogin");
       }
     });
   };
@@ -69,16 +69,18 @@ const Dashboard = () => {
             </h6>
             <ul className="menu rounded-box">
               <li className="py-2 grid cursor-pointer mx-5 place-items-left">
-                <Link className="text-gray-700" to="/dashboard">
+                <Link className="text-gray-700" to="">
                   <div className="flex">
                     <HomeModernIcon width={18} className="text-gray-600 mr-3" />
                     <div className="text-gray-700 hidden sm:block hidden sm:block">
-                      Dashboard
+                      Home
                     </div>
                   </div>
                 </Link>
               </li>
-              <li className="py-2 flex cursor-pointer mx-5">
+              </ul>
+              </div>
+              {/* <li className="py-2 flex cursor-pointer mx-5">
                 <Link className="text-gray-700" to="/dashboard/category">
                   <div className="flex">
                     <ChartPieIcon width={18} className="text-gray-600 mr-3" />
@@ -87,44 +89,21 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </Link>
-              </li>
-            </ul>
-          </div>
+              </li> */}
+            
+          
           <div className="border-b text-sm">
             <h6 className="mt-3 text-[10px] sm:text-sm text-center sm:text-left sm:px-5 ">
               <span className="sm:hidden">MANAGE</span>
               <span className="hidden sm:block">MANAGEMENT</span>
             </h6>
             <ul className="menu">
-              <li className="py-2 flex cursor-pointer mx-5">
-                <Link className="text-gray-700" to="/dashboard/menu">
-                  <div className="flex">
-                    <ClipboardDocumentIcon
-                      width={18}
-                      className="text-gray-600 mr-3"
-                    />
-                    <div className="text-gray-700 hidden sm:block hidden sm:block">
-                      Menu
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li className="py-2 flex cursor-pointer mx-5">
-                <Link className="text-gray-700" to="/dashboard/booking">
+               <li className="py-2 flex cursor-pointer mx-5">
+                <Link className="text-gray-700" to="/visitor/order">
                   <div className="flex">
                     <EnvelopeIcon width={18} className="text-gray-600 mr-3" />
                     <div className="text-gray-700 hidden sm:block hidden sm:block">
-                      Booking
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li className="py-2 flex cursor-pointer mx-5 mr-5">
-                <Link className="text-gray-700 flex" to="/dashboard/employee">
-                  <div className="flex">
-                    <UsersIcon width={18} className="text-gray-600 mr-3" />
-                    <div className="text-gray-700 hidden sm:block hidden sm:block">
-                      Account
+                      Order
                     </div>
                   </div>
                 </Link>
@@ -138,14 +117,14 @@ const Dashboard = () => {
                 className="py-2 flex cursor-pointer mx-5"
               >
                 <div className="py-2 flex text-gray-600 ml-3">
-                  {/* <Link to="/dashboard"> */}
+                  <Link to="/dashboard">
                     <div className="flex btn btn-ghost">
                       <PowerIcon width={18} className="text-gray-600" />
                       <div className="text-gray-700 hidden sm:block hidden sm:block">
                         Log out
                       </div>
                     </div>
-                  {/* </Link> */}
+                  </Link>
                 </div>
               </li>
             </ul>
@@ -159,4 +138,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default VisitorDashBoard;
