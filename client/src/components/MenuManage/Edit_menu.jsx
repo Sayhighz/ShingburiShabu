@@ -38,10 +38,10 @@ function Edit_menu() {
   return (
     <>
     <h4 className='text-3xl font-bold text-center text-white p-10'>แก้ไขเมนู</h4>
-    <div className='flex justify-center items-center'>
-    <div className='p-3 rounded-box w-35 h-50 border'>
+    <div className='flex justify-center items-center text-white'>
+    <div className='p-10 rounded-box w-35 h-50 border'>
       <form className='join join-vertical' onSubmit={handleSubmit}>
-        <label for="inputName" className='form-label p-3'>
+        <label htmlFor="inputName" className='form-label p-3'>
           ชื่อเมนู
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs' 
@@ -49,7 +49,7 @@ function Edit_menu() {
         value={menukub.name}
           onChange={(e) => setMenukub({ ...menukub, name: e.target.value })}
         />
-        <label for="inputPrice" className='form-label p-3'>
+        <label htmlFor="inputPrice" className='form-label p-3'>
           ราคา
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs'
@@ -57,17 +57,12 @@ function Edit_menu() {
           value={menukub.price}
           onChange={(e) => setMenukub({ ...menukub, price: e.target.value })}
         />
-        <label for="inputType" className='form-label p-3'>
+        <label htmlFor="inputType" className='form-label p-3'>
           ประเภท
         </label>
-        {/* <input type="text" className='input input-bordered w-full max-w-xs'
-          id='inputType'
-          value={menukub.type}
-          onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}
-        /> */}
-          <select className="select select-bordered w-full max-w-xs" type='text' id='inputType'
+          <select required className="select select-bordered w-full max-w-xs" type='text' id='inputType'
             onChange={(e) => setMenukub({ ...menukub, type: e.target.value })}>
-              <option disabled selected>ประเภท</option>
+              <option></option>
               <option>ของหวาน</option>
               <option>ของคาว</option>
             </select>        

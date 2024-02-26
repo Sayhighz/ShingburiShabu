@@ -1,8 +1,10 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-function Edit_employee() {
+// edit employee function
+// input email, password, role
+function Edit_employee(props) {
     const {id} = useParams()
     const [employee1, setEmployee1] = useState({
         email: "",
@@ -37,11 +39,13 @@ function Edit_employee() {
 
   return (
     <>
+    {/* header */}
     <h4 className='text-3xl font-bold text-center text-white p-10'>แก้ไขบัญชีพนักงาน</h4>
     <div className='flex justify-center items-center'>
+    {/* content */}
     <div className='p-3 rounded-box w-35 h-50 border'>
       <form className='join join-vertical' onSubmit={handleSubmit}>
-        <label for="inputEmail" className='form-label'>
+        <label htmlFor="inputEmail" className='form-label'>
           Email
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs' 
@@ -50,7 +54,7 @@ function Edit_employee() {
         value={employee1.email}
           onChange={(e) => setEmployee1({ ...employee1, email: e.target.value })}
         />
-        <label for="inputPassword" className='form-label p-3'>
+        <label htmlFor="inputPassword" className='form-label p-3'>
           Password
         </label>
         <input type="text" className='input input-bordered w-full max-w-xs'
@@ -59,15 +63,16 @@ function Edit_employee() {
           value={employee1.password}
           onChange={(e) => setEmployee1({ ...employee1, password: e.target.value })}
         />
-        <label for="" className='form-label p-3'>
+        <label htmlFor="" className='form-label p-3'>
           Role
         </label>
-        <input type="text" className='input input-bordered w-full max-w-xs'
-          id='inputType'
-          value={employee1.role}
-          placeholder='Edit Role'
-          onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}
-        />
+        <select required className="select select-bordered w-full max-w-xs" type='text' id='inputRole'
+              onChange={(e) => setEmployee1({ ...employee1, role: e.target.value })}>
+              <option></option>
+              <option>admin</option>
+              <option>visitor</option>
+            </select>
+            {/* submit btn */}
         <div className='flex justify-center'>
           <button type='submit' className='btn btn-outline btn-warning'>แก้ไข</button>
         </div>
