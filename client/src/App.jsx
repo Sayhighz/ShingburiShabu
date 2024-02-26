@@ -14,12 +14,26 @@ import Visitor from './components/Visitor'
 import Employee from './components/AccountManage/Employee'
 import Addemployee from './components/AccountManage/Addemployee'
 import Edit_employee from './components/AccountManage/Edit_employee'
+import VisitorDashBoard from './components/VisitorDashBoard' 
+import VisitorHome from './components/VisitorHome'
+import Order from './components/Order'
+import Test from './components/test'
+import Test2 from './components/Test2'
 
 function App() {
 
   return (
     <BrowserRouter>
       <Routes> 
+      <Route path='/adminlogin' element={<Login/>}></Route>
+        {/* <Route path='/visitor' element={<Visitor/>}></Route> */}
+        <Route path='/visitor' element={<VisitorDashBoard/>}>
+            <Route path='' element={<VisitorHome/>}></Route>
+            <Route path='/visitor/order' element={<Order/>}></Route>
+            <Route path='/visitor/test' element={<Test/>}></Route>
+            <Route path='/visitor/test2' element={<Test2/>}></Route>
+            </Route>
+
         <Route path='/adminlogin' element={<Login/>}></Route>
         <Route path='/visitor' element={<Visitor/>}></Route>
         <Route path='/dashboard' element={<Sidebar/>}>

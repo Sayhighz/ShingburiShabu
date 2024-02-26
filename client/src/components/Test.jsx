@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Test() {
   const [tables, setTables] = useState([]);
-  const [selectedTable, setSelectedTable] = useState(null); // State สำหรับเก็บข้อมูลโต๊ะที่ถูกเลือก
+  const [selectedTable, setSelectedTable] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,21 +20,23 @@ function Test() {
         console.error('Error fetching tables data:', error);
       }
     };
-  
+
     fetchData();
   }, []);
 
   const handleButtonClick = async (tableIndex) => {
     try {
-      // รับข้อมูลโต๊ะที่ถูกคลิกและเก็บไว้ใน state
       setSelectedTable(tables[tableIndex]);
+
+      if (tables[tableIndex].tb_status === 1) {
+        navigate('/visitor/order'); // ไปหน้า order ถ้าเช็คแล้วเป็นสีเหลือง
+      }
     } catch (error) {
       console.error('Error selecting table:', error);
     }
   };
 
   const handleCloseDialog = () => {
-    // ปิด dialog โดยการเคลียร์ state ของโต๊ะที่ถูกเลือก
     setSelectedTable(null);
   };
 
@@ -45,9 +49,8 @@ function Test() {
         },
         body: JSON.stringify({ status: selectedTable.tb_status === 1 ? 0 : 1 })
       });
-  
+
       if (response.ok) {
-        // อัปเดตข้อมูลโต๊ะหลังจากเปลี่ยนสถานะ
         const updatedTables = tables.map(table => {
           if (table.tb_number === selectedTable.tb_number) {
             return { ...table, tb_status: selectedTable.tb_status === 1 ? 0 : 1 };
@@ -55,8 +58,10 @@ function Test() {
           return table;
         });
         setTables(updatedTables);
-        // ปิด dialog
         handleCloseDialog();
+        
+        //พาไปหน้า visitor เมื่อ update data เสร็จ
+        navigate('/visitor');
       } else {
         console.error('Error updating table status:', response.statusText);
       }
