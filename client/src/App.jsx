@@ -35,8 +35,15 @@ function App() {
         <Route path='/dashboard/edit_employee/:id' element={<Edit_employee/>}></Route>
         <Route path='/dashboard/add_employee' element={<Addemployee/>}></Route>
         </Route>
-      </Routes>
+        
+        {/* <Route path='/visitor' element={<VisitorDashBoard/>}>
+            <Route path='' element={<VisitorHome/>}></Route>
+            <Route path='/visitor/order' element={<Order/>}></Route>
+            </Route> */}
+            
+        </Routes>  
     </BrowserRouter>
+   
   )
 }
 

@@ -224,6 +224,34 @@ router.get("/menu/:id", (req, res) => {
   });
 });
 
+router.get('/tables', (req,res) =>{
+    const sql = "SELECT * FROM `table`"
+    con.query(sql,(err, result) => {
+        if (err) return res.json({ Status: false, Error: err.message })
+        return res.json({ Status: true, Result: result })
+    })
+    }
+)
+
+router.put('/updateTableStatus/:tb_number', (req, res) => {
+    const tbNumber = req.params.tb_number;
+    const newStatus = req.body.status;
+
+    const sql = "UPDATE `table` SET tb_status = ? WHERE tb_number = ?";
+    con.query(sql, [newStatus, tbNumber], (err, result) => {
+        if (err) return res.json({ Status: false, Error: err.message });
+        return res.json({ Status: true });
+    });
+});
+
+
+
+
+router.get('/logout', (req,res) => {
+    res.clearCookie('token')
+    return res.json({Status:true})
+})
+
 // put new data
 router.put("/edit_menu/:id", (req, res) => {
   const id = req.params.id;
