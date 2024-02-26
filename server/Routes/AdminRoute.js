@@ -134,7 +134,7 @@ router.get("/popular", (req, res) => {
     SELECT m.name, COUNT(o.order_no) AS order_count
     FROM \`order\` o
     JOIN menu m ON o.food_no = m.id
-    WHERE o.create_date IS NOT NULL AND o.status = paymented
+    WHERE o.create_date IS NOT NULL
     GROUP BY o.order_no 
     ORDER BY order_count DESC
     LIMIT 5;
