@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto";
 
+// AnnualSales chart
 function AnnualSales() {
+  
   const [annualSales, setUserData] = useState({
     labels: [],
     datasets: [
@@ -18,7 +19,7 @@ function AnnualSales() {
           "#2a71d0",
         ],
         borderColor: "black",
-        borderWidth: 2,
+        borderWidth: 1,
       },
     ],
   });

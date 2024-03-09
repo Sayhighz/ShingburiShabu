@@ -19,7 +19,7 @@ import VisitorHome from './components/VisitorHome'
 import Order from './components/Order'
 import Test from './components/test'
 import Test2 from './components/Test2'
-import NightTest from './components/NightTest'
+import ListMenu from './components/Order/ListMenu'
 
 function App() {
 
@@ -33,7 +33,7 @@ function App() {
             <Route path='/visitor/order' element={<Order/>}></Route>
             <Route path='/visitor/test' element={<Test/>}></Route>
             <Route path='/visitor/test2' element={<Test2/>}></Route>
-            <Route path='/visitor/nighttest' element={<NightTest/>}></Route>
+            <Route path='/visitor/ordermenu' element={<ListMenu/>}></Route>
             </Route>
 
         <Route path='/adminlogin' element={<Login/>}></Route>

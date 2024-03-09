@@ -30,7 +30,7 @@ function ItemMenu(props) {
     return (
                 <div className="card w-80 bg-base-100 shadow-xl m-5">
                     <figure>
-                        <img src={`http://localhost:3000/Images/`+image} alt="" className='menuimage'/>
+                        <img src={`http://localhost:3000/Images/`+image} alt="" className='menuimage w-10'/>
                     </figure>
                     <div className="card-body">
                         <h2 className="card-title">Name : {name} Price : {price}</h2>

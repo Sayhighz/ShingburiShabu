@@ -122,7 +122,7 @@ function ListMenu() {
                 <span><button className='m-5' onClick={() => { cgy("เครื่องดื่ม") }}>เครื่องดื่ม</button></span>
                 <span><button className='m-5' onClick={() => { cgy("ของหวาน") }}>ของหวาน</button></span>
             </div>
-            <div className='m-5'>
+            <div className='m-5 flex justify-center'>
                 {filterMenu.map((element) => {
                     return <ItemMenu {...element} key={element.id} newItem={newOrderItem} />
                 })}

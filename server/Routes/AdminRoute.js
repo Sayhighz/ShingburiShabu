@@ -131,11 +131,11 @@ router.get("/annualsales", (req, res) => {
 // get popular menu
 router.get("/popular", (req, res) => {
   const sql = `
-    SELECT m.name, COUNT(o.order_no) AS order_count
+    SELECT m.name, SUM(o.food_amount) AS order_count
     FROM \`order\` o
     JOIN menu m ON o.food_no = m.id
     WHERE o.create_date IS NOT NULL
-    GROUP BY o.order_no 
+    GROUP BY o.food_no, m.name
     ORDER BY order_count DESC
     LIMIT 5;
   `;
