@@ -8,6 +8,10 @@ function OrderCard(props) {
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
   const navigate = useNavigate();
+  const now = new Date();
+  const thailandTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+  const formattedDate = thailandTime.toISOString().replace('T', ' ').slice(0, -5);
+
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -44,6 +48,26 @@ function OrderCard(props) {
       navigate("/visitor/ordermenu");
     } else {
       document.getElementById(`my_modal_${tableNo}`).showModal();
+    }
+  };
+
+  const handleCheckBill = async () => {
+    try {
+      const response = await axios.put(`http://localhost:3000/auth/ordering_update/`, {
+        payment_date: formattedDate,
+        order_status: "paymented",
+        table_no: tableNo
+      });
+
+      if (response.data.Status) {
+        alert("การชำระเงินเสร็จเรียบร้อยแล้ว");
+        window.location.reload();
+      } else {
+        alert(response.data.Error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("เกิดข้อผิดพลาดในการอัพเดทสถานะบิล");
     }
   };
 
@@ -108,7 +132,7 @@ function OrderCard(props) {
                   />
                   <input
                     type="number"
-                    value={amountPaid}
+                    value={String(amountPaid)}
                     onChange={(e) => setAmountPaid(parseFloat(e.target.value))}
                     className="input input-bordered w-full max-w-xs m-2"
                   />
@@ -122,14 +146,13 @@ function OrderCard(props) {
                 </div>
               </div>
               <span className="flex justify-center">
-              
-                <button className="btn btn-outline btn-success m-2 ">
+                <button className="btn btn-outline btn-success m-2" onClick={handleCheckBill}>
                   เช็คบิล
                 </button>
                 <Link to="/visitor/ordermenu">
-              <button className="btn btn-outline btn-success m-2">
-                  สั่งอาหารเพิ่ม
-                </button>
+                  <button className="btn btn-outline btn-success m-2">
+                    สั่งอาหารเพิ่ม
+                  </button>
                 </Link>
               </span>
             </form>

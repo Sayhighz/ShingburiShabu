@@ -339,15 +339,17 @@ router.get("/menu_count", (req, res) => {
   });
 });
 
-router.put("/ordering/:order_no", (req, res) => {
-  const id = req.params.order_no;
-  const sql = `UPDATE \`order\` set payment_date  = ? , order_status = ? WHERE order_no = ?`;
-  const values = [paymentDate, order_status, id];
+router.put("/ordering_update/", (req, res) => {
+  const sql = `UPDATE \`order\` SET payment_date = ?, order_status = ? WHERE table_no = ? AND order_status = 'not_paying'`;
+  const values = [req.body.payment_date, req.body.order_status, req.body.table_no];
+
   con.query(sql, values, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
     return res.json({ Status: true, Result: result });
   });
 });
+
+
 
 // logout method
 router.get("/logout", (req, res) => {
