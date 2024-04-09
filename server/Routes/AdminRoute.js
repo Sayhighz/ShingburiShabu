@@ -89,6 +89,35 @@ router.get("/order", (req, res) => {
   });
 });
 
+// req tableNo
+router.get("/table", (req, res) => {
+  const tableNo = req.query.tableNo;
+  const sql = `
+    SELECT *
+    FROM \`order\`
+    INNER JOIN menu ON \`order\`.food_no = menu.id
+    WHERE table_no = ${tableNo}
+    AND status = 'not_paying';
+  `;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+// show all table
+router.get("/alltables", (req, res) => {
+  const sql = `
+    SELECT DISTINCT table_no
+    FROM \`order\`;
+  `;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+
 // req year
 router.get("/monthlysales", (req, res) => {
   const year = req.query.year || 2024;
@@ -223,29 +252,6 @@ router.get("/menu/:id", (req, res) => {
     return res.json({ Status: true, Result: result });
   });
 });
-
-router.get('/tables', (req,res) =>{
-    const sql = "SELECT * FROM `table`"
-    con.query(sql,(err, result) => {
-        if (err) return res.json({ Status: false, Error: err.message })
-        return res.json({ Status: true, Result: result })
-    })
-    }
-)
-
-router.put('/updateTableStatus/:tb_number', (req, res) => {
-    const tbNumber = req.params.tb_number;
-    const newStatus = req.body.status;
-
-    const sql = "UPDATE `table` SET tb_status = ? WHERE tb_number = ?";
-    con.query(sql, [newStatus, tbNumber], (err, result) => {
-        if (err) return res.json({ Status: false, Error: err.message });
-        return res.json({ Status: true });
-    });
-});
-
-
-
 
 router.get('/logout', (req,res) => {
     res.clearCookie('token')

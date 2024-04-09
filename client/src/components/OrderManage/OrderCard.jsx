@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function OrderCard(props) {
-  const [cardText] = useState(props.cardText);
   const [cardColor, setCardColor] = useState("bg-green-500");
   const [tableNo] = useState(props.tableNo);
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/auth/order?tableNo=${tableNo}`
+          `http://localhost:3000/auth/table?tableNo=${tableNo}`
         );
         if (response.data.Status) {
           setOrder(response.data.Result);
@@ -38,17 +39,22 @@ function OrderCard(props) {
 
   const changeAmount = amountPaid - totalAmount;
 
+  const handleClick = () => {
+    if (orderkub.length === 0) {
+      navigate("/visitor/ordermenu");
+    } else {
+      document.getElementById(`my_modal_${tableNo}`).showModal();
+    }
+  };
 
   return (
     <>
-      <div className={`card w-60 shadow-xl ${cardColor} text-white m-10`}>
-        <div
-          className="card-body items-center text-center btn btn-ghost"
-          onClick={() =>
-            document.getElementById(`my_modal_${tableNo}`).showModal()
-          }
-        >
-          <h2 className="card-title">โต๊ะที่ {cardText}</h2>
+      <div
+        className={`card w-60 shadow-xl ${cardColor} text-white m-10`}
+        onClick={handleClick}
+      >
+        <div className="card-body items-center text-center btn btn-ghost">
+          <h1 className="card-title">โต๊ะที่ {tableNo}</h1>
         </div>
       </div>
       <dialog id={`my_modal_${tableNo}`} className="modal">
@@ -118,10 +124,6 @@ function OrderCard(props) {
               <div className="flex justify-center">
                 <button className="btn btn-outline btn-success m-2">
                   เช็คบิล
-                </button>
-
-                <button className="btn btn-outline btn-warning m-2">
-                  ย้ายโต๊ะ
                 </button>
               </div>
             </form>
