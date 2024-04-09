@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {ReactToPrint} from "react-to-print"
 import { useNavigate } from "react-router-dom";
 
 function OrderCard(props) {
@@ -38,6 +39,24 @@ function OrderCard(props) {
   );
 
   const changeAmount = amountPaid - totalAmount;
+
+  // ---------------------------Button เช็คบิล--------------------------------------------------------
+  const isButtonDisabled = amountPaid === 0 || isNaN(amountPaid) || amountPaid < totalAmount;
+
+  const handleClick2 = () => {
+    if (isButtonDisabled) {
+      if (amountPaid === 0 || isNaN(amountPaid)){
+        alert("กรุณากรอกจำนวนเงินที่ลูกค้าจ่ายให้ถูกต้อง");
+      }
+      return;
+    }
+
+    const modal = document.getElementById(`my_modal_${tableNo}`);
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  // ---------------------------Button เช็คบิล--------------------------------------------------------
 
   const handleClick = () => {
     if (orderkub.length === 0) {
@@ -122,7 +141,11 @@ function OrderCard(props) {
                 </div>
               </div>
               <div className="flex justify-center">
-                <button className="btn btn-outline btn-success m-2">
+                <button
+                  className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
+                  onClick={handleClick2}
+                  disabled={isButtonDisabled}
+                >
                   เช็คบิล
                 </button>
               </div>

@@ -23,7 +23,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
-    "react-to-print": "^2.14.15",
+    "react-to-print": "^2.15.1",
     "recharts": "^2.12.0",
     "sweetalert2": "^11.10.4"
   },
