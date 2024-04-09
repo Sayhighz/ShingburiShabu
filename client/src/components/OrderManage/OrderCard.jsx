@@ -43,6 +43,24 @@ function OrderCard(props) {
 
   const changeAmount = amountPaid - totalAmount;
 
+  // ---------------------------Button เช็คบิล--------------------------------------------------------
+  const isButtonDisabled = amountPaid === 0 || isNaN(amountPaid) || amountPaid < totalAmount;
+
+  const handleClick2 = () => {
+    if (isButtonDisabled) {
+      if (amountPaid === 0 || isNaN(amountPaid)){
+        alert("กรุณากรอกจำนวนเงินที่ลูกค้าจ่ายให้ถูกต้อง");
+      }
+      return;
+    }
+
+    const modal = document.getElementById(`my_modal_${tableNo}`);
+    if (modal) {
+      modal.showModal();
+    }
+  };
+  // ---------------------------Button เช็คบิล--------------------------------------------------------
+
   const handleClick = () => {
     if (orderkub.length === 0) {
       navigate("/visitor/ordermenu");
