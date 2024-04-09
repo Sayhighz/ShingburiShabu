@@ -44,14 +44,14 @@ const Sidebar_Visitor = () => {
           ></label>
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             <li className="py-2 grid cursor-pointer mx-5 place-items-left">
-              <Link className="text-gray-700" to="/dashboard">
+              <Link className="text-gray-700" to="/Visitor">
                 <div className="flex">
                   <HomeModernIcon width={18} className="text-white mr-3" />
-                  <div className="text-white">Dashboard</div>
+                  <div className="text-white">Table Manage</div>
                 </div>
               </Link>
             </li>
-            <li className="py-2 flex cursor-pointer mx-5">
+            {/* <li className="py-2 flex cursor-pointer mx-5">
               <Link className="text-gray-700" to="/dashboard/menu">
                 <div className="flex">
                   <ClipboardDocumentIcon
@@ -88,7 +88,7 @@ const Sidebar_Visitor = () => {
                   <div className="text-white">Logout</div>
                 </div>
               </div>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
