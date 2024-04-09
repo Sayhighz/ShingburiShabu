@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import ReactToPrint from 'react-to-print';
 
 function OrderCard(props) {
   const [cardColor, setCardColor] = useState("bg-green-500");
@@ -8,6 +9,7 @@ function OrderCard(props) {
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
   const navigate = useNavigate();
+  const componentRef = useRef(); // 1. เพิ่ม Ref สำหรับ Component
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -39,12 +41,11 @@ function OrderCard(props) {
 
   const changeAmount = amountPaid - totalAmount;
 
-  // ---------------------------Button เช็คบิล--------------------------------------------------------
   const isButtonDisabled = amountPaid === 0 || isNaN(amountPaid) || amountPaid < totalAmount;
 
   const handleClick2 = () => {
     if (isButtonDisabled) {
-      if (amountPaid === 0 || isNaN(amountPaid)){
+      if (amountPaid === 0 || isNaN(amountPaid)) {
         alert("กรุณากรอกจำนวนเงินที่ลูกค้าจ่ายให้ถูกต้อง");
       }
       return;
@@ -53,9 +54,11 @@ function OrderCard(props) {
     const modal = document.getElementById(`my_modal_${tableNo}`);
     if (modal) {
       modal.showModal();
+      if (componentRef.current) { // 3. เรียกใช้ ReactToPrint เมื่อกดเช็คบิล
+        componentRef.current.handlePrint();
+      }
     }
   };
-  // ---------------------------Button เช็คบิล--------------------------------------------------------
 
   const handleClick = () => {
     if (orderkub.length === 0) {
@@ -140,8 +143,7 @@ function OrderCard(props) {
                 </div>
               </div>
               <span className="flex justify-center">
-              
-              <button
+                <button
                   className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
                   onClick={handleClick2}
                   disabled={isButtonDisabled}
@@ -149,15 +151,16 @@ function OrderCard(props) {
                   เช็คบิล
                 </button>
                 <Link to="/visitor/ordermenu">
-              <button className="btn btn-outline btn-success m-2">
-                  สั่งอาหารเพิ่ม
-                </button>
+                  <button className="btn btn-outline btn-success m-2">
+                    สั่งอาหารเพิ่ม
+                  </button>
                 </Link>
               </span>
             </form>
           </div>
         </div>
       </dialog>
+
     </>
   );
 }
