@@ -97,7 +97,7 @@ router.get("/table", (req, res) => {
     FROM \`order\`
     INNER JOIN menu ON \`order\`.food_no = menu.id
     WHERE table_no = ${tableNo}
-    AND status = 'not_paying';
+    AND order_status = 'not_paying';
   `;
   con.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
@@ -179,9 +179,9 @@ router.get("/bill_detail", (req, res) => {
   const sql = `
     SELECT MIN(o.order_no) AS order_no, 
     MIN(o.table_no) AS table_no, 
-    CASE WHEN MIN(o.status) = 'paymented' THEN MIN(o.payment_date) ELSE MIN(o.create_date) END AS date,
+    CASE WHEN MIN(o.order_status) = 'paymented' THEN MIN(o.payment_date) ELSE MIN(o.create_date) END AS date,
     a.email AS create_by, 
-    MIN(o.status) AS status
+    MIN(o.order_status) AS order_status
     FROM \`order\` o
     JOIN admin a ON o.create_by = a.id
     WHERE o.create_date IS NOT NULL
@@ -334,6 +334,16 @@ router.get("/employee_count", (req, res) => {
 router.get("/menu_count", (req, res) => {
   const sql = "SELECT count(id) as menu from menu";
   con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+router.put("/ordering/:order_no", (req, res) => {
+  const id = req.params.order_no;
+  const sql = `UPDATE \`order\` set payment_date  = ? , order_status = ? WHERE order_no = ?`;
+  const values = [paymentDate, order_status, id];
+  con.query(sql, values, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
     return res.json({ Status: true, Result: result });
   });
