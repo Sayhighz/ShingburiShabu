@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function OrderCard(props) {
   const [cardColor, setCardColor] = useState("bg-green-500");
@@ -121,11 +121,17 @@ function OrderCard(props) {
                   />
                 </div>
               </div>
-              <div className="flex justify-center">
-                <button className="btn btn-outline btn-success m-2">
+              <span className="flex justify-center">
+              
+                <button className="btn btn-outline btn-success m-2 ">
                   เช็คบิล
                 </button>
-              </div>
+                <Link to="/visitor/ordermenu">
+              <button className="btn btn-outline btn-success m-2">
+                  สั่งอาหารเพิ่ม
+                </button>
+                </Link>
+              </span>
             </form>
           </div>
         </div>
