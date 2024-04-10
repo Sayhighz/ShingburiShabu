@@ -3,19 +3,19 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
+import uuid from 'react-uuid';
 
 function ListMenu() {
     const [menukub, setMenukub] = useState([])
     const [orderItem, setOrderItem] = useState([])
-    const [cgyMenu,setCgyMenu] = useState([])
-    const [cgyMenuSlice,setCgyMenuSlice] = useState([])
-    const [cgyMenuNum,setCgyMenuNum] = useState(0)
-    const [totalPrice,setTotalPrice] = useState(0)
-    const [search,setSearch] = useState("")
-    const [pages,setPages] = useState(0)
-    const [pagesLoop,setPagesLoop] = useState([])
-    const [showAll,setShowAll] = useState([])
-    if(pagesLoop == 1) {
+    const [cgyMenu, setCgyMenu] = useState([])
+    const [cgyMenuSlice, setCgyMenuSlice] = useState([])
+    const [cgyMenuNum, setCgyMenuNum] = useState(0)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [search, setSearch] = useState("")
+    const [pages, setPages] = useState(0)
+    const [pagesLoop, setPagesLoop] = useState([])
+    if (pagesLoop == 1) {
         setPagesLoop([])
     }
 
@@ -34,60 +34,62 @@ function ListMenu() {
 
 
     const numMenu = Number(cgyMenuNum)
-    const num = 3
+    const num = 6
     const itemPerPages = Math.ceil(numMenu / num)
 
-    useEffect(()=>{
-        setCgyMenu(menukub.slice(0,num))
+    useEffect(() => {
+        setCgyMenu(menukub.slice(0, num))
         setCgyMenuSlice(menukub)
         setCgyMenuNum(menukub.length)
 
         setFilterMenu(menukub)
-    },[menukub])
+    }, [menukub])
 
     const newOrderItem = (newOrder) => {
         setOrderItem((prevItem) => {
+            // const existingItem = prevItem.findIndex(item => item.id === prevItem.id)
+            // console.log(existingItem)
             return [...prevItem, newOrder]
         })
     }
 
     const cgy = (category) => {
-        if(category === "ทั้งหมด"){
+        if (category === "ทั้งหมด") {
             setCgyMenu(menukub)
-            setCgyMenu(menukub.slice(0,num))
+            setCgyMenu(menukub.slice(0, num))
             setCgyMenuSlice(menukub)
             setCgyMenuNum(menukub.length)
         } else {
-            const cgy_menu = menukub.filter(type=>type.type===category)
-            setCgyMenu(cgy_menu.slice(0,num))
+            const cgy_menu = menukub.filter(type => type.type === category)
+            setCgyMenu(cgy_menu.slice(0, num))
             setCgyMenuSlice(cgy_menu)
             setCgyMenuNum(cgy_menu.length)
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setPages([])
         setPages(itemPerPages)
         const newPagesLoop = Array.from(Array(pages).keys()).map(n => n + 1)
         setPagesLoop(newPagesLoop)
-    },[pages,itemPerPages])
+    }, [pages, itemPerPages])
 
     const goToPages = (value) => {
-        const itemPage = ((num*(value-1)))
-        const curPages = cgyMenuSlice.slice(itemPage,itemPage+num)
+        const itemPage = ((num * (value - 1)))
+        const curPages = cgyMenuSlice.slice(itemPage, itemPage + num)
         setCgyMenu(curPages)
         console.log(curPages)
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
     }
 
-    useEffect(()=>{
-        const price = orderItem.map(orderItem=>orderItem.price)
-        const amount = orderItem.map(orderItem=>orderItem.amount)
-        const total = price.map((price,index)=>price * amount[index])
-        const priceTotal = total.filter(element=>element>0).reduce((result,element)=>result += element,0)
+    useEffect(() => {
+        const price = orderItem.map(orderItem => orderItem.price)
+        const amount = orderItem.map(orderItem => orderItem.amount)
+        const total = price.map((price, index) => price * amount[index])
+        const priceTotal = total.filter(element => element > 0).reduce((result, element) => result += element, 0)
         setTotalPrice(priceTotal)
-    },[orderItem])
-
+        console.log(orderItem)
+    }, [orderItem])
 
     const searchMenu = (event) => {
         const nameByChr = event.target.value
@@ -98,51 +100,58 @@ function ListMenu() {
     }
 
 
-    const [filterMenu,setFilterMenu] = useState([])
-    useEffect(()=>{
+    const [filterMenu, setFilterMenu] = useState([])
+    useEffect(() => {
         const name_menu = cgyMenu.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
         setFilterMenu(name_menu)
 
-    },[cgyMenu,search])
+    }, [cgyMenu, search])
 
-    useEffect(()=>{
-        if(search.length == 0){
-            setCgyMenu(menukub.slice(0,num))
+    useEffect(() => {
+        if (search.length == 0) {
+            setCgyMenu(menukub.slice(0, num))
         }
-    },[search])
+    }, [search])
 
     return (
-        <div>
-            <div className='m-5'>
-                <input type="text" placeholder='ค้นหาเมนู' value={search} onChange={searchMenu} className="input input-bordered w-full max-w-xs " />
-            </div>
-            <div className='p-5'>
-                <span><button className='m-5' onClick={() => { cgy("ทั้งหมด") }}>ทั้งหมด</button></span>
-                <span><button className='m-5' onClick={() => { cgy("ของคาว") }}>ของคาว</button></span>
-                <span><button className='m-5' onClick={() => { cgy("เครื่องดื่ม") }}>เครื่องดื่ม</button></span>
-                <span><button className='m-5' onClick={() => { cgy("ของหวาน") }}>ของหวาน</button></span>
-            </div>
-            <div className='m-5'>
-                {filterMenu.map((element) => {
-                    return <ItemMenu {...element} key={element.id} newItem={newOrderItem} />
-                })}
-            </div>
-            <div className='m-5'>
-                {pagesLoop.map((value,index)=>{
-                    return(
-                            <span key={index}>
-                                <button className="btn btn-sm m-5 w-20 h-20" onClick={()=>{goToPages(value)}}>{value}</button>
-                            </span>
-                    )
-                })}
-            </div>
+        <div className='flex'>
             <div>
-                {orderItem.map((element) => {
-                    return <OrderList {...element} key={element.id} />
-                })}
+                <div className='m-5'>
+                    <input type="text" placeholder='ค้นหาเมนู' value={search} onChange={searchMenu} className="input input-bordered w-full max-w-xs " />
+                </div>
+                <div className='p-5'>
+                    <span><button className='m-5' onClick={() => { cgy("ทั้งหมด") }}>ทั้งหมด</button></span>
+                    <span><button className='m-5' onClick={() => { cgy("ของคาว") }}>ของคาว</button></span>
+                    <span><button className='m-5' onClick={() => { cgy("เครื่องดื่ม") }}>เครื่องดื่ม</button></span>
+                    <span><button className='m-5' onClick={() => { cgy("ของหวาน") }}>ของหวาน</button></span>
+                </div>
+                <div className='m-5 grid gap-4 grid-cols-2 grid-rows-3'>
+                    {filterMenu.map((element) => {
+                        return <ItemMenu {...element} key={element.id} newItem={newOrderItem} />
+                    })}
+                </div>
+                <div className='m-5'>
+                    {pagesLoop.map((value, index) => {
+                        return (
+                            <span key={index}>
+                                <button className="btn btn-sm m-5 w-20 h-20" onClick={() => { goToPages(value) }}>{value}</button>
+                            </span>
+                        )
+                    })}
+                </div>
             </div>
-            <div className='m-5'>
-                ราคารวม : <span className='font-bold text-lg'>{totalPrice}</span>
+            <div className='mt-60 max-w-fit p-5'>
+                <div className='m-5'>
+                    {orderItem.map((element) => {
+                        return <OrderList {...element} key={uuid()} />
+                    })}
+                </div>
+                <div className='m-5 text-center text-2xl'>
+                    ราคารวม : <span className='font-bold text-lg'>{totalPrice}</span>
+                </div>
+                <div className='m-5 text-center text-2xl'>
+                    <button>Order</button>
+                </div>
             </div>
         </div>
     )
