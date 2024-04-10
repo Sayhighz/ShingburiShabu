@@ -3,6 +3,7 @@ import axios from "axios";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
+// MonthlySales
 function MonthlySales(props) {
   const [years] = useState(props.years);
   const getMonthName = (monthNumber) => {
@@ -36,7 +37,7 @@ function MonthlySales(props) {
           "#2a71d0",
         ],
         borderColor: "black",
-        borderWidth: 2,
+        borderWidth: 0.5,
       },
     ],
   });

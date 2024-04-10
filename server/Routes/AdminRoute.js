@@ -89,6 +89,35 @@ router.get("/order", (req, res) => {
   });
 });
 
+// req tableNo
+router.get("/table", (req, res) => {
+  const tableNo = req.query.tableNo;
+  const sql = `
+    SELECT *
+    FROM \`order\`
+    INNER JOIN menu ON \`order\`.food_no = menu.id
+    WHERE table_no = ${tableNo}
+    AND order_status = 'not_paying';
+  `;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+// show all table
+router.get("/alltables", (req, res) => {
+  const sql = `
+    SELECT DISTINCT table_no
+    FROM \`order\`;
+  `;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+
 // req year
 router.get("/monthlysales", (req, res) => {
   const year = req.query.year || 2024;
@@ -131,11 +160,11 @@ router.get("/annualsales", (req, res) => {
 // get popular menu
 router.get("/popular", (req, res) => {
   const sql = `
-    SELECT m.name, COUNT(o.order_no) AS order_count
+    SELECT m.name, SUM(o.food_amount) AS order_count
     FROM \`order\` o
     JOIN menu m ON o.food_no = m.id
     WHERE o.create_date IS NOT NULL
-    GROUP BY o.order_no 
+    GROUP BY o.food_no, m.name
     ORDER BY order_count DESC
     LIMIT 5;
   `;
@@ -150,9 +179,9 @@ router.get("/bill_detail", (req, res) => {
   const sql = `
     SELECT MIN(o.order_no) AS order_no, 
     MIN(o.table_no) AS table_no, 
-    CASE WHEN MIN(o.status) = 'paymented' THEN MIN(o.payment_date) ELSE MIN(o.create_date) END AS date,
+    CASE WHEN MIN(o.order_status) = 'paymented' THEN MIN(o.payment_date) ELSE MIN(o.create_date) END AS date,
     a.email AS create_by, 
-    MIN(o.status) AS status
+    MIN(o.order_status) AS order_status
     FROM \`order\` o
     JOIN admin a ON o.create_by = a.id
     WHERE o.create_date IS NOT NULL
@@ -223,29 +252,6 @@ router.get("/menu/:id", (req, res) => {
     return res.json({ Status: true, Result: result });
   });
 });
-
-router.get('/tables', (req,res) =>{
-    const sql = "SELECT * FROM `table`"
-    con.query(sql,(err, result) => {
-        if (err) return res.json({ Status: false, Error: err.message })
-        return res.json({ Status: true, Result: result })
-    })
-    }
-)
-
-router.put('/updateTableStatus/:tb_number', (req, res) => {
-    const tbNumber = req.params.tb_number;
-    const newStatus = req.body.status;
-
-    const sql = "UPDATE `table` SET tb_status = ? WHERE tb_number = ?";
-    con.query(sql, [newStatus, tbNumber], (err, result) => {
-        if (err) return res.json({ Status: false, Error: err.message });
-        return res.json({ Status: true });
-    });
-});
-
-
-
 
 router.get('/logout', (req,res) => {
     res.clearCookie('token')
@@ -332,6 +338,18 @@ router.get("/menu_count", (req, res) => {
     return res.json({ Status: true, Result: result });
   });
 });
+
+router.put("/ordering_update/", (req, res) => {
+  const sql = `UPDATE \`order\` SET payment_date = ?, order_status = ? WHERE table_no = ? AND order_status = 'not_paying'`;
+  const values = [req.body.payment_date, req.body.order_status, req.body.table_no];
+
+  con.query(sql, values, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
+
 
 // logout method
 router.get("/logout", (req, res) => {
