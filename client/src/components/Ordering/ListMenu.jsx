@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
 import uuid from 'react-uuid';
@@ -15,6 +15,7 @@ function ListMenu() {
     const [search, setSearch] = useState("")
     const [pages, setPages] = useState(0)
     const [pagesLoop, setPagesLoop] = useState([])
+    const { tableNo } = useParams() // รับค่า tableNo จาก URL
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
@@ -135,7 +136,7 @@ function ListMenu() {
         uniqueMenus.forEach((menu) => {
             const orderData = {
                 "order_no": "30", // ใช้ uuid สร้าง UUID สำหรับ order_no
-                "table_no": "15",
+                "table_no": tableNo,
                 "food_no": menu.id, 
                 "food_amount": menu.amount,
                 "order_status": "not_paying",

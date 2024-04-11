@@ -54,6 +54,7 @@ function OrderCard(props) {
       }
       return;
     }
+    handleCheckBill()
 
     const modal = document.getElementById(`my_modal_${tableNo}`);
     if (modal) {
@@ -66,7 +67,7 @@ function OrderCard(props) {
 
   const handleClick = () => {
     if (orderkub.length === 0) {
-      navigate("/visitor/ordermenu");
+      navigate(`/visitor/ordermenu/${tableNo}`);
     } else {
       document.getElementById(`my_modal_${tableNo}`).showModal();
     }
@@ -174,7 +175,7 @@ function OrderCard(props) {
                 >
                   เช็คบิล
                 </button>
-                <Link to="/visitor/ordermenu">
+                <Link to={`/visitor/ordermenu/${tableNo}`}>
                   <button className="btn btn-outline btn-success m-2">
                     สั่งอาหารเพิ่ม
                   </button>
