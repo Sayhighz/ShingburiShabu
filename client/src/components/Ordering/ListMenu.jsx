@@ -131,38 +131,38 @@ function ListMenu() {
 
     const goToDB = () => {
         console.log(uniqueMenus) //เมนูตอนสั่ง อยู่ในนี้
-        // const orderToDB = uniqueMenus.map(menu => ({
-        //     order_no: 1,
-        //     table_no: 1, //เอาโต๊ะมาจากไหน?
-        //     food_no: menu.id, 
-        //     food_amount: menu.amount,
-        //     order_status: "not_paying",
-        //     create_date: new Date().toISOString(),
-        //     create_by: 12 // กายบอกยากกูก็ไม่รู้จะยังไงแล้วครับ
-        // }));
-        const orderToDB = {
+        const orderToDB = uniqueMenus.map(menu => ({
             "order_no": "20",
-  "table_no": "15",
-  "food_no": "2",
-  "food_amount": "6",
-  "order_status": "not_paying",
-  "create_date": "22-22-2256",
-  "create_by": "12"
-        }
+            "table_no": "8", //เอาโต๊ะมาจากไหน?
+            "food_no": menu.id,
+            "food_amount": menu.amount,
+            "order_status": "not_paying",
+            "create_date": new Date().toISOString(),
+            "create_by": 12 // กายบอกยากกูก็ไม่รู้จะยังไงแล้วครับ
+        }));
+        // const orderToDB = {
+        //     "order_no": "20",
+        //     "table_no": "15",
+        //     "food_no": "2",
+        //     "food_amount": "6",
+        //     "order_status": "not_paying",
+        //     "create_date": "22-22-2256",
+        //     "create_by": "12"
+        // }
         console.log(orderToDB)
 
-        axios.post('http://localhost:3000/auth/orderToDB', orderToDB)
-        .then(response => {
-            console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
-            // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
-        })
-        .catch(error => {
-            console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
-            // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
-        });
+        axios.put('http://localhost:3000/auth/orderToDB', orderToDB)
+            .then(response => {
+                console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
+                // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
+            })
+            .catch(error => {
+                console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
+                // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
+            });
     }
 
-    const increaseByBtn =(amount,id,text)=>{
+    const increaseByBtn = (amount, id, text) => {
         console.log(id)
         console.log(amount)
         setOrderItem(orderItem.map(menu => {
@@ -205,7 +205,7 @@ function ListMenu() {
             <div className='mt-60 max-w-fit p-5'>
                 <div className='m-5'>
                     {uniqueMenus.map(menu => (
-                        <OrderList {...menu} key={uuid()} onDeleteItem={deleteItem} increaseByBtn={increaseByBtn}/>
+                        <OrderList {...menu} key={uuid()} onDeleteItem={deleteItem} increaseByBtn={increaseByBtn} />
                     ))}
                 </div>
                 <div className='m-5 text-center text-4xl w-96'>
