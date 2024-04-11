@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate,useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
 import uuid from 'react-uuid';
@@ -15,7 +15,8 @@ function ListMenu() {
     const [search, setSearch] = useState("")
     const [pages, setPages] = useState(0)
     const [pagesLoop, setPagesLoop] = useState([])
-    const { tableNo } = useParams()
+    const { tableNo } = useParams() // รับค่า tableNo จาก URL
+    const now = new Date()
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
@@ -132,20 +133,20 @@ function ListMenu() {
 
     const goToDB = () => {
         console.log(uniqueMenus); // เมนูที่สั่ง อยู่ในนี้
-        
+
         uniqueMenus.forEach((menu) => {
             const orderData = {
                 "order_no": "30", // ใช้ uuid สร้าง UUID สำหรับ order_no
                 "table_no": tableNo,
-                "food_no": menu.id, 
+                "food_no": menu.id,
                 "food_amount": menu.amount,
                 "order_status": "not_paying",
-                "create_date": new Date().toISOString(),
+                "create_date": new Date(now.getTime() + (7 * 60 * 60 * 1000)),
                 "create_by": "12"
             };
-            
+
             console.log("order to db ----", orderData);
-    
+
             axios.put('http://localhost:3000/auth/orderToDB', orderData)
                 .then(response => {
                     console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
@@ -164,7 +165,7 @@ function ListMenu() {
         setOrderItem(orderItem.map(menu => {
             if (menu.id === id && text == "plus") {
                 return { ...menu, amount: menu.amount + 1 }
-            } else {
+            } else if (menu.id === id && text == "minus") {
                 return { ...menu, amount: menu.amount - 1 }
             }
             return menu
@@ -205,9 +206,23 @@ function ListMenu() {
                     ))}
                 </div>
                 <div className='m-5 text-center text-4xl w-96'>
-                    <button onClick={goToDB} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
+                    <button onClick={()=>document.getElementById('my_modal_4').showModal()} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
                 </div>
             </div>
+            <dialog id="my_modal_4" className="modal">
+                <div className="modal-box w-11/12 max-w-1xl">
+                    <h3 className="font-bold text-lg">ORDER!</h3>
+                    <p className="py-4">จะทำการส่งออเดอร์เลยไหม?</p>
+                    <div className="modal-action">
+                        <form method="dialog">
+                            <button className="btn mr-10">สั่งอาหารต่อ</button>
+                            <Link to={"/visitor"}>
+                            <button className="btn" onClick={goToDB}>สั่งออเดอร์</button>
+                            </Link>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
         </div>
     )
 }
