@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate,useParams } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
 import uuid from 'react-uuid';
@@ -15,6 +15,7 @@ function ListMenu() {
     const [search, setSearch] = useState("")
     const [pages, setPages] = useState(0)
     const [pagesLoop, setPagesLoop] = useState([])
+    const { tableNo } = useParams()
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
@@ -130,37 +131,32 @@ function ListMenu() {
     })
 
     const goToDB = () => {
-        console.log(uniqueMenus) //เมนูตอนสั่ง อยู่ในนี้
-        const orderToDB = uniqueMenus.map(menu => ({
-            "order_no": "20",
-            "table_no": "8", //เอาโต๊ะมาจากไหน?
-            "food_no": menu.id,
-            "food_amount": menu.amount,
-            "order_status": "not_paying",
-            "create_date": new Date().toISOString(),
-            "create_by": 12 // กายบอกยากกูก็ไม่รู้จะยังไงแล้วครับ
-        }));
-        // const orderToDB = {
-        //     "order_no": "20",
-        //     "table_no": "15",
-        //     "food_no": "2",
-        //     "food_amount": "6",
-        //     "order_status": "not_paying",
-        //     "create_date": "22-22-2256",
-        //     "create_by": "12"
-        // }
-        console.log(orderToDB)
-
-        axios.put('http://localhost:3000/auth/orderToDB', orderToDB)
-            .then(response => {
-                console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
-                // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
-            })
-            .catch(error => {
-                console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
-                // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
-            });
-    }
+        console.log(uniqueMenus); // เมนูที่สั่ง อยู่ในนี้
+        
+        uniqueMenus.forEach((menu) => {
+            const orderData = {
+                "order_no": "30", // ใช้ uuid สร้าง UUID สำหรับ order_no
+                "table_no": tableNo,
+                "food_no": menu.id, 
+                "food_amount": menu.amount,
+                "order_status": "not_paying",
+                "create_date": new Date().toISOString(),
+                "create_by": "12"
+            };
+            
+            console.log("order to db ----", orderData);
+    
+            axios.put('http://localhost:3000/auth/orderToDB', orderData)
+                .then(response => {
+                    console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
+                    // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
+                })
+                .catch(error => {
+                    console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
+                    // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
+                });
+        });
+    };
 
     const increaseByBtn = (amount, id, text) => {
         console.log(id)

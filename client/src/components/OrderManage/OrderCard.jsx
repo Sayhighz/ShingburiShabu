@@ -66,7 +66,7 @@ function OrderCard(props) {
 
   const handleClick = () => {
     if (orderkub.length === 0) {
-      navigate("/visitor/ordermenu");
+      navigate(`/visitor/ordermenu/${tableNo}`);
     } else {
       document.getElementById(`my_modal_${tableNo}`).showModal();
     }
