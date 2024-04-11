@@ -1,46 +1,30 @@
 import React, { useState } from 'react'
 
 function ItemMenu(props) {
-    const { id,name, price, image } = props
-    const [countValue,setCountValue] = useState(0)
-    const [showBtn,setShowBtn] = useState(true)
-    const plus = () => {
-        setCountValue(countValue+1)
-        setShowBtn(false)
-    }
-    const minus = () => {
-        if(countValue<=1){
-            setCountValue(0)
-            setShowBtn(true)
-        } else {
-            setCountValue(countValue-1)
-        }
-    }
+    const { id,name, price, image} = props
+    const [showBtn,setShowBtn] = useState(false)
     const orderItem = () => {
-        setCountValue(0)
         setShowBtn(true)
         const newOrderItem = {
             id:id ,
             name: name ,
             price: Number(price) ,
-            amount: Number(countValue) 
+            amount: 1,
+            image: image 
         }
+        props.increaseValue(newOrderItem.id)
         props.newItem(newOrderItem)
     }
+
     return (
                 <div className="card w-80 bg-base-100 shadow-xl m-5">
                     <figure>
-                        <img src={`http://localhost:3000/Images/`+image} alt="" className='menuimage w-10'/>
+                        <img src={`http://localhost:3000/Images/`+image} alt="" className='menuimage h-60 w-60 mt-5'/>
                     </figure>
                     <div className="card-body">
                         <h2 className="card-title">Name : {name} Price : {price}</h2>
-                        <div className="card-actions">
-                            <button className="btn" onClick={minus}>-</button>
-                            <p className='items-center text-center'>
-                                {countValue}
-                            </p>
-                            <button className="btn" onClick={plus}>+</button>
-                            <button onClick={orderItem} disabled={showBtn}>Order</button>
+                        <div className='flex justify-center'>
+                            <button disabled={showBtn} onClick={orderItem} className='text-xl border border-inherit rounded-md p-1 bg-white text-black w-28'>Order</button>
                         </div>
                     </div>
                 </div>
