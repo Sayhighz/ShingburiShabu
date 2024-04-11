@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 function ItemMenu(props) {
-    const { id,name, price, image } = props
+    const { id,name, price, image} = props
     const [showBtn,setShowBtn] = useState(false)
     const orderItem = () => {
         setShowBtn(true)
@@ -12,8 +12,10 @@ function ItemMenu(props) {
             amount: 1,
             image: image 
         }
+        props.increaseValue(newOrderItem.id)
         props.newItem(newOrderItem)
     }
+
     return (
                 <div className="card w-80 bg-base-100 shadow-xl m-5">
                     <figure>

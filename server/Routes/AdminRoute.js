@@ -349,6 +349,16 @@ router.put("/ordering_update/", (req, res) => {
   });
 });
 
+router.put("/orderToDB", (req, res) => {
+  const { order_no, table_no, food_no, food_amount, order_status, create_date, create_by } = req.body;
+  const sql = `INSERT INTO \`order\` (order_no, table_no, food_no, food_amount, order_status, create_date, create_by) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const values = [order_no, table_no, food_no, food_amount, order_status, create_date, create_by];
+  con.query(sql, values, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true, Result: result });
+  });
+});
+
 
 
 // logout method

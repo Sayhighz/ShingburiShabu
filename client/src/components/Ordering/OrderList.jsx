@@ -1,31 +1,46 @@
 import React, { useEffect, useState } from 'react'
 
 function OrderList(props) {
-  const { image, name, price, amount } = props
+
+  // if(typeof onDeleteItem === 'function'){
+  //   console.log('fun')
+  // } else {
+  //   console.log('not')
+  // }
+
+  const { id,image, name, price, amount } = props
   const [totalPrice, setTotalPrice] = useState(price * amount)
   const [itemOrder, setItemOrder] = useState(amount)
 
   useEffect(() => {
     setTotalPrice(itemOrder * price)
-    // const updateOrder = {
-    //   price: Number(price),
-    //   amount: itemOrder,
-    // }
-    // props.priceByMenu(updateOrder)
   }, [itemOrder])
 
   const plusOrder = () => {
     setItemOrder(itemOrder + 1)
+    props.increaseByBtn(itemOrder+1,id,"plus")
   }
   const minusOrder = () => {
     setItemOrder(itemOrder - 1)
+    props.increaseByBtn(itemOrder-1,id,"minus")
   }
-
+  
   useEffect(() => {
     if (itemOrder <= 0) {
       setItemOrder(0)   //ลบได้
     }
   }, [itemOrder])
+
+  const onDeleteItem =(name)=>{
+    const newOrderItem = {
+      id:id ,
+      // name: name ,
+      // price: Number(price) ,
+      // amount: 1,
+      // image: image 
+  }
+    props.onDeleteItem(newOrderItem.id)
+  }
 
   return (
     <div className='card w-96 bg-base-100 shadow-xl p-5 m-5 flex'>
@@ -41,7 +56,12 @@ function OrderList(props) {
           <p>จำนวน : {itemOrder} ชิ้น </p>
         </div>
         <div className='flex items-center'>
+          {itemOrder > 1 &&
           <span><button onClick={minusOrder} className='w-12 h-8 bg-red-600 mr-5 rounded-3xl'>-</button></span>
+          }
+          {itemOrder <= 1 && (
+            <button className='w-12 h-8 bg-red-600 mr-5 rounded-3xl text-2xl' onClick={()=>onDeleteItem(name)}>&#x1F5D1;</button>
+          )}
           <span><button onClick={plusOrder} className='w-12 h-8 bg-green-600 rounded-3xl'>+</button></span>
         </div>
       </div>
