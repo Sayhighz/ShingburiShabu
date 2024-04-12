@@ -18,7 +18,7 @@ const Sidebar_Visitor = () => {
   const handleLogout = () => {
     axios.get("http://localhost:3000/auth/logout").then((result) => {
       if (result.data.Status) {
-        anvigate("/adminlogin");
+        anvigate("/");
       }
     });
   };
@@ -89,6 +89,17 @@ const Sidebar_Visitor = () => {
                 </div>
               </div>
             </li> */}
+            <li
+              onClick={handleLogout}
+              className="py-2 flex cursor-pointer mx-5 mr-5"
+            >
+              <div className="flex text-white">
+                <div className="flex">
+                  <PowerIcon width={18} className="text-white mr-3" />
+                  <div className="text-white">Logout</div>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
   CurrencyDollarIcon,
 } from "@heroicons/react/20/solid";
 
+
 function Dashboard() {
   const [adminTotal, setAdminTotal] = useState(0);
   const [menutotal, setMenuTotal] = useState(0);

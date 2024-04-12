@@ -9,7 +9,7 @@ function OrderCard(props) {
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
   const navigate = useNavigate();
-  const componentRef = useRef(); // 1. เพิ่ม Ref สำหรับ Component
+  const componentRef = useRef();
   const now = new Date();
   const thailandTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
   const formattedDate = thailandTime.toISOString().replace('T', ' ').slice(0, -5);
@@ -50,18 +50,14 @@ function OrderCard(props) {
   const handleClick2 = () => {
     if (isButtonDisabled) {
       if (amountPaid === 0 || isNaN(amountPaid)) {
-        alert("กรุณากรอกจำนวนเงินที่ลูกค้าจ่ายให้ถูกต้อง");
+        alert("Please enter the correct amount paid by the customer");
       }
       return;
     }
     handleCheckBill()
-
     const modal = document.getElementById(`my_modal_${tableNo}`);
     if (modal) {
       modal.showModal();
-      if (componentRef.current) { // 3. เรียกใช้ ReactToPrint เมื่อกดเช็คบิล
-        componentRef.current.handlePrint();
-      }
     }
   };
 
@@ -73,7 +69,7 @@ function OrderCard(props) {
     }
   };
 
-  const handleCheckBill = async () => {
+ const handleCheckBill = async () => {
     try {
       const response = await axios.put(`http://localhost:3000/auth/ordering_update/`, {
         payment_date: formattedDate,
@@ -93,99 +89,132 @@ function OrderCard(props) {
     }
   };
 
+  const PrintContent = React.forwardRef((props, ref) => (
+    <div ref={ref}>
+      <table className="table table-zebra m-5 text-center">
+        <thead className="text-white bg-base-100">
+          <tr>
+            <th>รายการอาหาร</th>
+            <th>จำนวน</th>
+            <th>ราคา(ต่อชิ้น)</th>
+            <th>ยอดรวม</th>
+          </tr>
+        </thead>
+        <tbody className="text-white">
+          {orderkub.length > 0 ? (
+            orderkub.map((item, index) => (
+              <tr key={index}>
+                <td style={{ color: 'red' }}>{item.name}</td>
+                <td style={{ color: 'red' }}>{item.food_amount}</td>
+                <td style={{ color: 'red' }}>{item.price}</td>
+                <td style={{ color: 'red' }}>{item.price * item.food_amount}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">No items ordered</td>
+            </tr>
+          )}
+          {orderkub.length > 0 && (
+            <>
+              <tr>
+                <td style={{ color: 'red' }}>ราคาทั้งหมด</td>
+                <td></td>
+                <td></td>
+                <td style={{ color: 'red' }}>{totalAmount}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style={{ color: 'red' }}>จ่าย</td>
+                <td></td>
+                <td></td>
+                <td style={{ color: 'red' }}>{amountPaid}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style={{ color: 'red' }}>เงินทอน</td>
+                <td></td>
+                <td></td>
+                <td style={{ color: 'red' }}>{changeAmount}</td>
+                <td></td>
+              </tr>
+            </>
+          )}
+        </tbody>
+      </table>
+    </div>
+  ));
+  
+
   return (
     <>
-      <div
-        className={`card w-60 shadow-xl ${cardColor} text-white m-10`}
-        onClick={handleClick}
-      >
+      <div className={`card w-60 shadow-xl ${cardColor} text-white m-10`} onClick={handleClick}>
         <div className="card-body items-center text-center btn btn-ghost">
-          <h1 className="card-title">โต๊ะที่ {tableNo}</h1>
+          <h1 className="card-title">Table {tableNo}</h1>
         </div>
       </div>
       <dialog id={`my_modal_${tableNo}`} className="modal">
-        <div className="modal-box">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <h3 className="font-bold text-center">โต๊ะที่ {tableNo}</h3>
-          <div className="grid content-center">
-            <div>
-              <div className="flex items-center overflow-y-auto">
-                <table className="table table-zebra m-5 text-center">
-                  <thead className="text-white bg-base-100">
-                    <tr>
-                      <th>รายการอาหาร</th>
-                      <th>จำนวน</th>
-                      <th>ราคาต่อชิ้น</th>
-                      <th>ราคา</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-white">
-                    {orderkub.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.name}</td>
-                        <td>{item.food_amount}</td>
-                        <td>{item.price}</td>
-                        <td>{item.price * item.food_amount}</td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td>ยอดสุทธิ</td>
-                      <td></td>
-                      <td></td>
-                      <td>{totalAmount}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <form className="">
-              <div className="flex justify-center">
-                <div className="join join-vertical">
-                  <label htmlFor="">รวมทั้งสิ้น (บาท)</label>
-                  <input
-                    type="text"
-                    placeholder={totalAmount}
-                    className="input input-bordered w-full max-w-xs m-2"
-                    disabled
-                  />
-                  <input
-                    type="number"
-                    value={String(amountPaid)}
-                    onChange={(e) => setAmountPaid(parseFloat(e.target.value))}
-                    className="input input-bordered w-full max-w-xs m-2"
-                  />
-                  <label htmlFor="">เงินทอน (บาท)</label>
-                  <input
-                    type="text"
-                    value={changeAmount >= 0 ? changeAmount : ""}
-                    className="input input-bordered w-full max-w-xs m-2"
-                    disabled
-                  />
-                </div>
-              </div>
-              <span className="flex justify-center">
-                <button
-                  className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
-                  onClick={handleClick2}
-                  disabled={isButtonDisabled}
-                >
-                  เช็คบิล
-                </button>
-                <Link to={`/visitor/ordermenu/${tableNo}`}>
-                  <button className="btn btn-outline btn-success m-2">
-                    สั่งอาหารเพิ่ม
-                  </button>
-                </Link>
-              </span>
-            </form>
+    <div className="modal-box">
+      <form>
+        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          ✕
+        </button>
+      </form>
+      <h3 className="font-bold text-center">โต๊ะ {tableNo}</h3>
+      <ReactToPrint
+        trigger={() => <button className="btn btn-outline btn-success m-2">พิมพ์ใบเสร็จ</button>}
+        content={() => componentRef.current}
+      />
+      <div className="grid content-center">
+        <div>
+          <div className="flex items-center overflow-y-auto">
+            <PrintContent ref={componentRef} />
           </div>
         </div>
-      </dialog>
-
+        <form className="">
+          <div className="flex justify-center">
+            <div className="join join-vertical">
+              <label htmlFor="">ราคาทั้งหมด (บาท)</label>
+              <input
+                type="text"
+                placeholder={totalAmount}
+                className="input input-bordered w-full max-w-xs m-2"
+                disabled
+              />
+              <input
+                type="number"
+                value={String(amountPaid)}
+                onChange={(e) => setAmountPaid(parseFloat(e.target.value))}
+                className="input input-bordered w-full max-w-xs m-2"
+              />
+              <label htmlFor="">เงินทอน (บาท)</label>
+              <input
+                type="text"
+                value={changeAmount >= 0 ? changeAmount : ""}
+                className="input input-bordered w-full max-w-xs m-2"
+                disabled
+              />
+            </div>
+          </div>
+          <span className="flex justify-center">
+            <button
+              className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
+              onClick={handleClick2}
+              disabled={isButtonDisabled}
+            >
+              เช็คบิล
+            </button>
+            
+            <Link to={`/visitor/ordermenu/${tableNo}`}>
+              <button className="btn btn-outline btn-success m-2">
+                สั่งอาหารเพิ่ม
+              </button>
+            </Link>
+          </span>
+        </form>
+      </div>
+    </div>
+  </dialog>
     </>
   );
 }

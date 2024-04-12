@@ -27,6 +27,8 @@ router.post("/adminlogin", (req, res) => {
   });
 });
 
+
+
 router.get("/category", (req, res) => {
   const sql = "SELECT * FROM category";
   con.query(sql, (err, result) => {
@@ -253,11 +255,6 @@ router.get("/menu/:id", (req, res) => {
   });
 });
 
-router.get('/logout', (req,res) => {
-    res.clearCookie('token')
-    return res.json({Status:true})
-})
-
 // put new data
 router.put("/edit_menu/:id", (req, res) => {
   const id = req.params.id;
@@ -358,6 +355,8 @@ router.put("/orderToDB", (req, res) => {
     return res.json({ Status: true, Result: result });
   });
 });
+
+
 
 
 
