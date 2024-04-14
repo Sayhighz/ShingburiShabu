@@ -21,8 +21,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes> 
-        <Route path='/adminlogin' element={<Login/>}></Route>
-        <Route path='/adminlogin' element={<Login/>}></Route>
+        <Route path='/' element={<Login/>}></Route>
+        <Route path='/' element={<Login/>}></Route>
           <Route path='/visitor' element={<Sidebar_Visitor/>}>
               <Route path='' element={<OrderManage/>}></Route>
               <Route path='/visitor/ordermenu/:tableNo' element={<ListMenu/>}></Route>

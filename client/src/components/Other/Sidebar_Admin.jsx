@@ -18,7 +18,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     axios.get("http://localhost:3000/auth/logout").then((result) => {
       if (result.data.Status) {
-        anvigate("/adminlogin");
+        anvigate("/");
       }
     });
   };
