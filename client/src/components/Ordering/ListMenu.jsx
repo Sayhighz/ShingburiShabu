@@ -156,6 +156,7 @@ function ListMenu() {
                     console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
                     // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
                 });
+            // axios.
         });
     };
 
@@ -206,7 +207,7 @@ function ListMenu() {
                     ))}
                 </div>
                 <div className='m-5 text-center text-4xl w-96'>
-                    <button onClick={()=>document.getElementById('my_modal_4').showModal()} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
+                    <button onClick={() => document.getElementById('my_modal_4').showModal()} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
                 </div>
             </div>
             <dialog id="my_modal_4" className="modal">
@@ -215,9 +216,9 @@ function ListMenu() {
                     <p className="py-4">จะทำการส่งออเดอร์เลยไหม?</p>
                     <div className="modal-action">
                         <form method="dialog">
-                            <button className="btn mr-10">สั่งอาหารต่อ</button>
+                            <button className="btn mr-5">สั่งอาหารต่อ</button>
                             <Link to={"/visitor"}>
-                            <button className="btn" onClick={goToDB}>สั่งออเดอร์</button>
+                                <button className="btn" onClick={goToDB}>สั่งออเดอร์</button>
                             </Link>
                         </form>
                     </div>

@@ -359,6 +359,17 @@ router.put("/orderToDB", (req, res) => {
   });
 });
 
+// // order count
+// router.get("/orderRepeat", (req, res) => {
+//   const sql = `SELECT COUNT(DISTINCT order_no) AS total_orders
+//     FROM \`order\`
+//     WHERE create_date IS NOT NULL;`;
+//   con.query(sql, (err, result) => {
+//     if (err) return res.json({ Status: false, Error: err.message });
+//     return res.json({ Status: true, Result: result });
+//   });
+// });
+
 
 
 // logout method
