@@ -25,7 +25,7 @@ function App() {
         <Route path='/' element={<Login/>}></Route>
           <Route path='/visitor' element={<Sidebar_Visitor/>}>
               <Route path='' element={<OrderManage/>}></Route>
-              <Route path='/visitor/ordermenu/:tableNo' element={<ListMenu/>}></Route>
+              <Route path='/visitor/ordermenu/:tableNo/:order_no' element={<ListMenu/>}></Route>
           </Route>
           <Route path='/dashboard' element={<Sidebar/>}>
             <Route path='/dashboard' element={<Dashboard/>}></Route>

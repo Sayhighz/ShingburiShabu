@@ -2,12 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ReactToPrint from 'react-to-print';
+import ListMenu from "../Ordering/ListMenu";
 
 function OrderCard(props) {
   const [cardColor, setCardColor] = useState("bg-green-500");
   const [tableNo] = useState(props.tableNo);
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
+  const [orderNO, setOrderNo] = useState(0)
+  const [oldOrderNo,setOldOrderNo] = useState(0)
   const navigate = useNavigate();
   const componentRef = useRef();
   const now = new Date();
@@ -61,15 +64,41 @@ function OrderCard(props) {
     }
   };
 
+  axios
+    .get("http://localhost:3000/auth/newOrderNo")
+    .then((result) => {
+      if (result.data.Status) {
+        setOrderNo(result.data.orderNo);
+      } else {
+        alert(result.data.Error);
+      }
+    })
+    .catch((err) => console.log(err));
+
+    const oldOrderNoFun = () => {
+      axios
+      .get(`http://localhost:3000/auth/oldOrderNo?table_no=${tableNo}`)
+      .then((result) => {
+        if (result.data.Status) {
+          console.log(result.data.order_no)
+          setOldOrderNo(result.data.order_no);
+        } else {
+          alert(result.data.Error);
+        }
+      })
+      .catch((err) => console.log(err));
+    }
+
   const handleClick = () => {
     if (orderkub.length === 0) {
-      navigate(`/visitor/ordermenu/${tableNo}`);
+      navigate(`/visitor/ordermenu/${tableNo}/${orderNO+1}`);     //เลขบิลใหม่
     } else {
+      oldOrderNoFun()
       document.getElementById(`my_modal_${tableNo}`).showModal();
     }
   };
 
- const handleCheckBill = async () => {
+  const handleCheckBill = async () => {
     try {
       const response = await axios.put(`http://localhost:3000/auth/ordering_update/`, {
         payment_date: formattedDate,
@@ -144,7 +173,7 @@ function OrderCard(props) {
       </table>
     </div>
   ));
-  
+
 
   return (
     <>
@@ -154,67 +183,67 @@ function OrderCard(props) {
         </div>
       </div>
       <dialog id={`my_modal_${tableNo}`} className="modal">
-    <div className="modal-box">
-      <form>
-        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-          ✕
-        </button>
-      </form>
-      <h3 className="font-bold text-center">โต๊ะ {tableNo}</h3>
-      <ReactToPrint
-        trigger={() => <button className="btn btn-outline btn-success m-2">พิมพ์ใบเสร็จ</button>}
-        content={() => componentRef.current}
-      />
-      <div className="grid content-center">
-        <div>
-          <div className="flex items-center overflow-y-auto">
-            <PrintContent ref={componentRef} />
+        <div className="modal-box">
+          <form>
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-center">โต๊ะ {tableNo}</h3>
+          <ReactToPrint
+            trigger={() => <button className="btn btn-outline btn-success m-2">พิมพ์ใบเสร็จ</button>}
+            content={() => componentRef.current}
+          />
+          <div className="grid content-center">
+            <div>
+              <div className="flex items-center overflow-y-auto">
+                <PrintContent ref={componentRef} />
+              </div>
+            </div>
+            <form className="">
+              <div className="flex justify-center">
+                <div className="join join-vertical">
+                  <label htmlFor="">ราคาทั้งหมด (บาท)</label>
+                  <input
+                    type="text"
+                    placeholder={totalAmount}
+                    className="input input-bordered w-full max-w-xs m-2"
+                    disabled
+                  />
+                  <input
+                    type="number"
+                    value={String(amountPaid)}
+                    onChange={(e) => setAmountPaid(parseFloat(e.target.value))}
+                    className="input input-bordered w-full max-w-xs m-2"
+                  />
+                  <label htmlFor="">เงินทอน (บาท)</label>
+                  <input
+                    type="text"
+                    value={changeAmount >= 0 ? changeAmount : ""}
+                    className="input input-bordered w-full max-w-xs m-2"
+                    disabled
+                  />
+                </div>
+              </div>
+              <span className="flex justify-center">
+                <button
+                  className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
+                  onClick={handleClick2}
+                  disabled={isButtonDisabled}
+                >
+                  เช็คบิล
+                </button>
+
+                <Link to={`/visitor/ordermenu/${tableNo}/${oldOrderNo}`} >
+                  <button className="btn btn-outline btn-success m-2">
+                    สั่งอาหารเพิ่ม
+                  </button>
+                </Link>
+              </span>
+            </form>
           </div>
         </div>
-        <form className="">
-          <div className="flex justify-center">
-            <div className="join join-vertical">
-              <label htmlFor="">ราคาทั้งหมด (บาท)</label>
-              <input
-                type="text"
-                placeholder={totalAmount}
-                className="input input-bordered w-full max-w-xs m-2"
-                disabled
-              />
-              <input
-                type="number"
-                value={String(amountPaid)}
-                onChange={(e) => setAmountPaid(parseFloat(e.target.value))}
-                className="input input-bordered w-full max-w-xs m-2"
-              />
-              <label htmlFor="">เงินทอน (บาท)</label>
-              <input
-                type="text"
-                value={changeAmount >= 0 ? changeAmount : ""}
-                className="input input-bordered w-full max-w-xs m-2"
-                disabled
-              />
-            </div>
-          </div>
-          <span className="flex justify-center">
-            <button
-              className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
-              onClick={handleClick2}
-              disabled={isButtonDisabled}
-            >
-              เช็คบิล
-            </button>
-            
-            <Link to={`/visitor/ordermenu/${tableNo}`}>
-              <button className="btn btn-outline btn-success m-2">
-                สั่งอาหารเพิ่ม
-              </button>
-            </Link>
-          </span>
-        </form>
-      </div>
-    </div>
-  </dialog>
+      </dialog>
     </>
   );
 }

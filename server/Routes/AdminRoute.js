@@ -356,18 +356,60 @@ router.put("/orderToDB", (req, res) => {
   });
 });
 
-// // order count
-// router.get("/orderRepeat", (req, res) => {
-//   const sql = `SELECT COUNT(DISTINCT order_no) AS total_orders
-//     FROM \`order\`
-//     WHERE create_date IS NOT NULL;`;
-//   con.query(sql, (err, result) => {
-//     if (err) return res.json({ Status: false, Error: err.message });
-//     return res.json({ Status: true, Result: result });
-//   });
-// });
+// // order count 
+router.get("/orderRepeat", (req, res) => {
+  const { order_no, table_no, food_no } = req.query;
+
+  const sql = `SELECT food_amount FROM \`order\` o 
+  WHERE o.order_no = ? AND o.table_no = ? AND o.food_no = ? `;
+  con.query(sql, [order_no, table_no, food_no], (err, result) => {
+    if (err) return res.status(500).json({ status: false, error: err.message });
+
+    if (result.length === 0) {
+      return res.status(404).json({ status: false, message: 'No record found' });
+    }
+
+    const foodAmount = result[0].food_amount;
+    return res.json({ status: true, food_amount: foodAmount });
+  })
+});
+
+router.post("/add_orderRepeat", (req, res) => {
+  const sql = `UPDATE \`order\` SET food_amount = ? WHERE order_no = ? AND table_no = ? AND food_no = ? AND order_status = ?`;
+  const values = [req.body.newAmount, req.body.order_no, req.body.table_no, req.body.food_no,req.body.order_status];
+
+  con.query(sql, values, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    return res.json({ Status: true });
+  });
+});
 
 
+router.get("/newOrderNo", (req, res) => {
+  const sql = `SELECT order_no FROM \`order\` ORDER BY order_no DESC LIMIT 1`;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    if (result.length > 0) {
+      const orderNo = result[0].order_no; // เลือก order_no จากอาร์เรย์ของผลลัพธ์
+      return res.json({ Status: true, orderNo });
+    } else {
+      return res.json({ Status: false, Error: "No order found" });
+    }
+  });
+});
+
+
+router.get("/oldOrderNo", (req, res) => {
+  const { table_no } = req.query
+  const sql = `SELECT order_no FROM \`order\` WHERE table_no = ${table_no} AND order_status = "not_paying" `;
+  con.query(sql, (err, result) => {
+    if (err) return res.json({ Status: false, Error: err.message });
+    else {
+      const orderNo = result[0].order_no;
+      return res.json({ Status: true , order_no:orderNo });
+    }
+  });
+});
 
 
 

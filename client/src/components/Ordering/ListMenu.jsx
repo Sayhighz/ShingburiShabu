@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
 import uuid from 'react-uuid';
@@ -15,12 +15,18 @@ function ListMenu() {
     const [search, setSearch] = useState("")
     const [pages, setPages] = useState(0)
     const [pagesLoop, setPagesLoop] = useState([])
+    const [foodAmount, setFoodAmount] = useState(0)
     const { tableNo } = useParams() // รับค่า tableNo จาก URL
+    const location = useLocation();
     const now = new Date()
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
-
+    const regex = /\/visitor\/ordermenu\/\d+\/(\d+)/;
+    const match = location.pathname.match(regex);
+    const order_no = match ? match[1] : null;
+    // console.log(location.pathname)
+    // console.log(order_no)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -49,8 +55,6 @@ function ListMenu() {
 
     const newOrderItem = (newOrder) => {
         setOrderItem((prevItem) => {
-            // const existingItem = prevItem.findIndex(item => item.id === prevItem.id)
-            // console.log(existingItem)
             return [...prevItem, newOrder]
         })
     }
@@ -80,7 +84,6 @@ function ListMenu() {
         const itemPage = ((num * (value - 1)))
         const curPages = cgyMenuSlice.slice(itemPage, itemPage + num)
         setCgyMenu(curPages)
-        console.log(curPages)
         window.scrollTo(0, 0)
     }
 
@@ -95,7 +98,6 @@ function ListMenu() {
     const searchMenu = (event) => {
         const nameByChr = event.target.value
         setSearch(nameByChr)
-        console.log(nameByChr)
         setCgyMenu(menukub)
         setFilterMenu(menukub)
     }
@@ -105,7 +107,6 @@ function ListMenu() {
     useEffect(() => {
         const name_menu = cgyMenu.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
         setFilterMenu(name_menu)
-        console.log(filterMenu)
     }, [cgyMenu, search])
 
     useEffect(() => {
@@ -136,7 +137,7 @@ function ListMenu() {
 
         uniqueMenus.forEach((menu) => {
             const orderData = {
-                "order_no": "30", // ใช้ uuid สร้าง UUID สำหรับ order_no
+                "order_no": order_no, // ใช้ uuid สร้าง UUID สำหรับ order_no
                 "table_no": tableNo,
                 "food_no": menu.id,
                 "food_amount": menu.amount,
@@ -151,18 +152,38 @@ function ListMenu() {
                 .then(response => {
                     console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
                     // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
+
+                    if (response.data.Status == false) {
+                        axios.get(`http://localhost:3000/auth/orderRepeat?order_no=${order_no}&table_no=${tableNo}&food_no=${menu.id}`, foodAmount)
+                            .then((result) => {
+                                if (result.data.status) {
+                                    setFoodAmount(result.data);
+                                    console.log(result.data)
+                                    console.log(menu.amount + result.data.food_amount)
+                                    let add_orderRepeat = {
+                                        newAmount: Number(menu.amount + result.data.food_amount),
+                                        order_no: order_no,
+                                        table_no: Number(tableNo),
+                                        food_no: menu.id,
+                                        order_status: "not_paying"
+                                    }
+                                    console.log(add_orderRepeat)
+                                    axios.post("http://localhost:3000/auth/add_orderRepeat", add_orderRepeat)
+                                } else {
+                                    alert(result.data.Error);
+                                }
+                            })
+                            .catch((err) => console.log(err));
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
                     // แสดงข้อความข้อผิดพลาดบน UI หรือดำเนินการตามความเหมาะสม
                 });
-            // axios.
         });
     };
 
     const increaseByBtn = (amount, id, text) => {
-        console.log(id)
-        console.log(amount)
         setOrderItem(orderItem.map(menu => {
             if (menu.id === id && text == "plus") {
                 return { ...menu, amount: menu.amount + 1 }
@@ -220,6 +241,7 @@ function ListMenu() {
                             <Link to={"/visitor"}>
                                 <button className="btn" onClick={goToDB}>สั่งออเดอร์</button>
                             </Link>
+                            {/* <button className="btn" onClick={goToDB}>สั่งออเดอร์</button> */}
                         </form>
                     </div>
                 </div>
