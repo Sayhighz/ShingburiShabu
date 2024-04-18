@@ -6,19 +6,19 @@ import OrderList from './OrderList'
 import uuid from 'react-uuid';
 
 function ListMenu() {
-    const [menukub, setMenukub] = useState([])
-    const [orderItem, setOrderItem] = useState([])
-    const [cgyMenu, setCgyMenu] = useState([])
-    const [cgyMenuSlice, setCgyMenuSlice] = useState([])
-    const [cgyMenuNum, setCgyMenuNum] = useState(0)
+    const [menukub, setMenukub] = useState([])                  //เมนูที่ดึงมาจาก DB
+    const [orderItem, setOrderItem] = useState([])              //เมนูที่สั่ง
+    const [cgyMenu, setCgyMenu] = useState([])                  //เอาไว้ใช้อะไรก็ได้ที่เกี่ยวกับเมนู แบ่งหมวดหมู่ slice ต่างๆโดยมาจาก menukub
+    const [cgyMenuSlice, setCgyMenuSlice] = useState([])        //เอาไว้ใช้ตอนกดเลขหน้า
+    const [cgyMenuNum, setCgyMenuNum] = useState(0)             //จำนวนของ menukub
     const [totalPrice, setTotalPrice] = useState(0)
-    const [search, setSearch] = useState("")
-    const [pages, setPages] = useState(0)
-    const [pagesLoop, setPagesLoop] = useState([])
-    const [foodAmount, setFoodAmount] = useState(0)
-    const { tableNo } = useParams() // รับค่า tableNo จาก URL
-    const location = useLocation();
-    const now = new Date()
+    const [search, setSearch] = useState("")                    //เกี่ยวกับการค้นหาเมนู
+    const [pages, setPages] = useState(0)                       //เกี่ยวกับเลขหน้า
+    const [pagesLoop, setPagesLoop] = useState([])              //เกี่ยวกับเลขหน้า
+    const [foodAmount, setFoodAmount] = useState(0)             //เมื่อเมนูซ้ำ แต่ส่งได้
+    const { tableNo } = useParams()                             // รับค่า tableNo จาก URL
+    const location = useLocation();                             //url
+    const now = new Date()                                      //วันที่
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
