@@ -13,6 +13,13 @@ import {
 const Sidebar = () => {
   const anvigate = useNavigate();
   axios.defaults.withCredentials = true;
+  const [userEmail, setUserEmail] = useState(""); // เพิ่ม state สำหรับเก็บอีเมล
+
+  useEffect(() => {
+    // ดึงอีเมลจาก localStorage เมื่อคอมโพเนนต์โหลด
+    const email = localStorage.getItem("validAdmin");
+    setUserEmail(email); // อัปเดต state สำหรับอีเมล
+  }, []);
 
   // logout
   const handleLogout = () => {
@@ -44,6 +51,14 @@ const Sidebar = () => {
             className="drawer-overlay"
           ></label>
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+          <li className="py-2 grid cursor-pointer mx-5 place-items-left">
+              <Link className="text-gray-700" to="/dashboard">
+                <div className="flex">
+                  <HomeModernIcon width={50} className="text-white mr-3" />
+                  <div className="text-white">สวัสดีคุณ <br/>{userEmail}</div>
+                </div>
+              </Link>
+            </li>
             <li className="py-2 grid cursor-pointer mx-5 place-items-left">
               <Link className="text-gray-700" to="/dashboard">
                 <div className="flex">

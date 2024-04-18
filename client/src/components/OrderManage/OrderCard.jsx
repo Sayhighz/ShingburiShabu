@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import ReactToPrint from 'react-to-print';
-import ListMenu from "../Ordering/ListMenu";
+import ReactToPrint from "react-to-print";
 
 function OrderCard(props) {
   const [cardColor, setCardColor] = useState("bg-green-500");
   const [tableNo] = useState(props.tableNo);
   const [orderkub, setOrder] = useState([]);
   const [amountPaid, setAmountPaid] = useState(0);
-  const [orderNO, setOrderNo] = useState(0)
-  const [oldOrderNo,setOldOrderNo] = useState(0)
+  const [orderNO, setOrderNo] = useState(0);
+  const [oldOrderNo, setOldOrderNo] = useState(0);
   const navigate = useNavigate();
   const componentRef = useRef();
   const now = new Date();
-  const thailandTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
-  const formattedDate = thailandTime.toISOString().replace('T', ' ').slice(0, -5);
-
+  const thailandTime = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+  const formattedDate = thailandTime
+    .toISOString()
+    .replace("T", " ")
+    .slice(0, -5);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -48,7 +49,8 @@ function OrderCard(props) {
 
   const changeAmount = amountPaid - totalAmount;
 
-  const isButtonDisabled = amountPaid === 0 || isNaN(amountPaid) || amountPaid < totalAmount;
+  const isButtonDisabled =
+    amountPaid === 0 || isNaN(amountPaid) || amountPaid < totalAmount;
 
   const handleClick2 = () => {
     if (isButtonDisabled) {
@@ -57,7 +59,7 @@ function OrderCard(props) {
       }
       return;
     }
-    handleCheckBill()
+    handleCheckBill();
     const modal = document.getElementById(`my_modal_${tableNo}`);
     if (modal) {
       modal.showModal();
@@ -75,36 +77,39 @@ function OrderCard(props) {
     })
     .catch((err) => console.log(err));
 
-    const oldOrderNoFun = () => {
-      axios
+  const oldOrderNoFun = () => {
+    axios
       .get(`http://localhost:3000/auth/oldOrderNo?table_no=${tableNo}`)
       .then((result) => {
         if (result.data.Status) {
-          console.log(result.data.order_no)
+          console.log(result.data.order_no);
           setOldOrderNo(result.data.order_no);
         } else {
           alert(result.data.Error);
         }
       })
       .catch((err) => console.log(err));
-    }
+  };
 
   const handleClick = () => {
     if (orderkub.length === 0) {
-      navigate(`/visitor/ordermenu/${tableNo}/${orderNO+1}`);     //เลขบิลใหม่
+      navigate(`/visitor/ordermenu/${tableNo}/${orderNO + 1}`);
     } else {
-      oldOrderNoFun()
+      oldOrderNoFun();
       document.getElementById(`my_modal_${tableNo}`).showModal();
     }
   };
 
   const handleCheckBill = async () => {
     try {
-      const response = await axios.put(`http://localhost:3000/auth/ordering_update/`, {
-        payment_date: formattedDate,
-        order_status: "paymented",
-        table_no: tableNo
-      });
+      const response = await axios.put(
+        `http://localhost:3000/auth/ordering_update/`,
+        {
+          payment_date: formattedDate,
+          order_status: "paymented",
+          table_no: tableNo,
+        }
+      );
 
       if (response.data.Status) {
         alert("การชำระเงินเสร็จเรียบร้อยแล้ว");
@@ -120,8 +125,12 @@ function OrderCard(props) {
 
   const PrintContent = React.forwardRef((props, ref) => (
     <div ref={ref}>
+              <div className="text-center">
+                <div>โต๊ะ: {tableNo}</div>
+                <div>เลขที่บิล: {oldOrderNo}</div>
+              </div>
       <table className="table table-zebra m-5 text-center">
-        <thead className="text-white bg-base-100">
+        <thead className="bg-base-100">
           <tr>
             <th>รายการอาหาร</th>
             <th>จำนวน</th>
@@ -129,14 +138,16 @@ function OrderCard(props) {
             <th>ยอดรวม</th>
           </tr>
         </thead>
-        <tbody className="text-white">
+        <tbody>
           {orderkub.length > 0 ? (
             orderkub.map((item, index) => (
               <tr key={index}>
-                <td style={{ color: 'red' }}>{item.name}</td>
-                <td style={{ color: 'red' }}>{item.food_amount}</td>
-                <td style={{ color: 'red' }}>{item.price}</td>
-                <td style={{ color: 'red' }}>{item.price * item.food_amount}</td>
+                <td>{item.name}</td>
+                <td>{item.food_amount}</td>
+                <td>{item.price}</td>
+                <td>
+                  {item.price * item.food_amount}
+                </td>
               </tr>
             ))
           ) : (
@@ -147,24 +158,24 @@ function OrderCard(props) {
           {orderkub.length > 0 && (
             <>
               <tr>
-                <td style={{ color: 'red' }}>ราคาทั้งหมด</td>
+                <td>ราคาทั้งหมด</td>
                 <td></td>
                 <td></td>
-                <td style={{ color: 'red' }}>{totalAmount}</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td style={{ color: 'red' }}>จ่าย</td>
-                <td></td>
-                <td></td>
-                <td style={{ color: 'red' }}>{amountPaid}</td>
+                <td>{totalAmount}</td>
                 <td></td>
               </tr>
               <tr>
-                <td style={{ color: 'red' }}>เงินทอน</td>
+                <td>จ่าย</td>
                 <td></td>
                 <td></td>
-                <td style={{ color: 'red' }}>{changeAmount}</td>
+                <td>{amountPaid}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>เงินทอน</td>
+                <td></td>
+                <td></td>
+                <td>{changeAmount}</td>
                 <td></td>
               </tr>
             </>
@@ -174,10 +185,12 @@ function OrderCard(props) {
     </div>
   ));
 
-
   return (
     <>
-      <div className={`card w-60 shadow-xl ${cardColor} text-white m-10`} onClick={handleClick}>
+      <div
+        className={`card w-60 shadow-xl ${cardColor} text-white m-10`}
+        onClick={handleClick}
+      >
         <div className="card-body items-center text-center btn btn-ghost">
           <h1 className="card-title">Table {tableNo}</h1>
         </div>
@@ -191,7 +204,11 @@ function OrderCard(props) {
           </form>
           <h3 className="font-bold text-center">โต๊ะ {tableNo}</h3>
           <ReactToPrint
-            trigger={() => <button className="btn btn-outline btn-success m-2">พิมพ์ใบเสร็จ</button>}
+            trigger={() => (
+              <button className="btn btn-outline btn-success m-2">
+                พิมพ์ใบเสร็จ
+              </button>
+            )}
             content={() => componentRef.current}
           />
           <div className="grid content-center">
@@ -227,14 +244,16 @@ function OrderCard(props) {
               </div>
               <span className="flex justify-center">
                 <button
-                  className={`btn btn-outline btn-success m-2 ${isButtonDisabled ? 'disabled' : ''}`}
+                  className={`btn btn-outline btn-success m-2 ${
+                    isButtonDisabled ? "disabled" : ""
+                  }`}
                   onClick={handleClick2}
                   disabled={isButtonDisabled}
                 >
                   เช็คบิล
                 </button>
 
-                <Link to={`/visitor/ordermenu/${tableNo}/${oldOrderNo}`} >
+                <Link to={`/visitor/ordermenu/${tableNo}/${oldOrderNo}`}>
                   <button className="btn btn-outline btn-success m-2">
                     สั่งอาหารเพิ่ม
                   </button>
