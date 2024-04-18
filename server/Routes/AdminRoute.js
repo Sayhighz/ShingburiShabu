@@ -109,8 +109,8 @@ router.get("/table", (req, res) => {
 // show all table
 router.get("/alltables", (req, res) => {
   const sql = `
-    SELECT DISTINCT table_no
-    FROM \`order\`;
+    SELECT table_no
+    FROM \`table\`;
   `;
   con.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
@@ -389,10 +389,12 @@ router.get("/newOrderNo", (req, res) => {
   con.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
     if (result.length > 0) {
-      const orderNo = result[0].order_no; // เลือก order_no จากอาร์เรย์ของผลลัพธ์
+      const orderNo = result[0].order_no + 1; // เลือก order_no จากอาร์เรย์ของผลลัพธ์แล้วเพิ่ม 1
       return res.json({ Status: true, orderNo });
     } else {
-      return res.json({ Status: false, Error: "No order found" });
+      // หากไม่มี order ให้สร้าง order_no แรกเป็น 1
+      const orderNo = 0;
+      return res.json({ Status: true, orderNo });
     }
   });
 });
