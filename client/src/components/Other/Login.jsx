@@ -17,12 +17,13 @@ function Login() {
     axios.post("http://localhost:3000/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
-          localStorage.setItem("valid", true);
           // Assuming your JWT token has a 'role' claim
           const role = result.data.role;
           if (role === "admin") {
+            localStorage.setItem("validAdmin", true);
             navigate("/dashboard");
           } else if (role === "visitor") {
+            localStorage.setItem("validVisitor", true);
             navigate("/visitor");
           } else {
             navigate("/");

@@ -15,6 +15,8 @@ import Addemployee from './components/AccountManage/Addemployee'
 import Edit_employee from './components/AccountManage/Edit_employee'
 import OrderManage from './components/OrderManage/OrderManage'
 import ListMenu from './components/Ordering/ListMenu'
+import PrivateRoute from './components/Other/PrivateRoute'
+import VisitorRoute from './components/Other/VisitorRoute'
 
 function App() {
 
@@ -23,11 +25,17 @@ function App() {
       <Routes> 
         <Route path='/' element={<Login/>}></Route>
         <Route path='/' element={<Login/>}></Route>
-          <Route path='/visitor' element={<Sidebar_Visitor/>}>
+          <Route path='/visitor' element={
+          <VisitorRoute>
+          <Sidebar_Visitor/>
+          </VisitorRoute>}>
               <Route path='' element={<OrderManage/>}></Route>
               <Route path='/visitor/ordermenu/:tableNo/:order_no' element={<ListMenu/>}></Route>
           </Route>
-          <Route path='/dashboard' element={<Sidebar/>}>
+          <Route path='/dashboard' element={
+          <PrivateRoute>
+          <Sidebar/>
+          </PrivateRoute>}>
             <Route path='/dashboard' element={<Dashboard/>}></Route>
             <Route path='/dashboard/menu' element={<Menu/>}></Route>
             <Route path='/dashboard/employee' element={<Employee/>}></Route>
