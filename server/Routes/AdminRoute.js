@@ -20,13 +20,12 @@ router.post("/adminlogin", (req, res) => {
         expiresIn: "1d",
       });
       res.cookie("token", token);
-      return res.json({ loginStatus: true, role });
+      return res.json({ loginStatus: true, role, email }); // Add email to the response
     } else {
       return res.json({ loginStatus: false, Error: "Wrong Email or Password" });
     }
   });
 });
-
 
 
 router.get("/category", (req, res) => {

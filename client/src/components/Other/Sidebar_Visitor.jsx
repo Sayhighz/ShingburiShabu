@@ -13,6 +13,13 @@ import {
 const Sidebar_Visitor = () => {
   const anvigate = useNavigate();
   axios.defaults.withCredentials = true;
+  const [emailVisitor , setemailVisitor] = useState(""); 
+
+  useEffect(() => {
+    // ดึงอีเมลจาก localStorage เมื่อคอมโพเนนต์โหลด
+    const email = localStorage.getItem("validVisitor");
+    setemailVisitor(email); // อัปเดต state สำหรับอีเมล
+  }, []);
 
   // logout
   const handleLogout = () => {
@@ -44,6 +51,14 @@ const Sidebar_Visitor = () => {
             className="drawer-overlay"
           ></label>
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+          <li className="py-2 grid cursor-pointer mx-5 place-items-left">
+              <Link className="text-gray-700" to="/Visitor">
+                <div className="flex">
+                  <HomeModernIcon width={50} className="text-white mr-3" />
+                  <div className="text-white">สวัสดีคุณ <br />{emailVisitor}</div>
+                </div>
+              </Link>
+            </li>
             <li className="py-2 grid cursor-pointer mx-5 place-items-left">
               <Link className="text-gray-700" to="/Visitor">
                 <div className="flex">
