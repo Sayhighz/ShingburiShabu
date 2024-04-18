@@ -43,8 +43,8 @@ function Login() {
         <div className="card-body items-left text-left shadow-xl">
             {/* form */}
           <form action="" onSubmit={handleSubmit}>
-            <div className="card-title m-5 flex justify-center m-5">
-              <h2>SHABU LOGIN</h2>
+            <div className="card-title m-5 flex justify-center">
+              <h2>LOGIN</h2>
             </div>
             <div className="input-field m-5">
               <label htmlFor="email">Email: </label>
