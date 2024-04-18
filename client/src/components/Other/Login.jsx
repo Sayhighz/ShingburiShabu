@@ -14,20 +14,21 @@ function Login() {
   axios.defaults.withCredentials = true;
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:3000/auth/adminlogin", values)
+    axios.post("http://localhost:3000/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
-          localStorage.setItem("valid", true);
           // Assuming your JWT token has a 'role' claim
           const role = result.data.role;
+          const email = result.data.email; // Added line to retrieve email from response
           if (role === "admin") {
+            localStorage.setItem("validAdmin", email); // Store email in localStorage
             navigate("/dashboard");
           } else if (role === "visitor") {
+            localStorage.setItem("validVisitor", email); // Store email in localStorage
             navigate("/visitor");
           } else {
-            navigate("/adminlogin");
-            alert("ํYou don't have permission");
+            navigate("/");
+            alert("You don't have permission");
           }
         } else {
           setError(result.data.Error);
@@ -42,8 +43,8 @@ function Login() {
         <div className="card-body items-left text-left shadow-xl">
             {/* form */}
           <form action="" onSubmit={handleSubmit}>
-            <div className="card-title m-5 flex justify-center m-5">
-              <h2>SHABU LOGIN</h2>
+            <div className="card-title m-5 flex justify-center">
+              <h2>LOGIN</h2>
             </div>
             <div className="input-field m-5">
               <label htmlFor="email">Email: </label>

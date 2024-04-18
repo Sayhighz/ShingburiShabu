@@ -17,6 +17,7 @@ function OrderManage() {
       })
       .catch((err) => console.log(err));
   }, []);
+
   return (
     <>
     <h4 className='flex justify-center text-3xl font-bold text-center text-white p-10'>จัดการโต๊ะ</h4>

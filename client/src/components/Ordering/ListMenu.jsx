@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import ItemMenu from './ItemMenu'
 import OrderList from './OrderList'
 import uuid from 'react-uuid';
 
 function ListMenu() {
-    const [menukub, setMenukub] = useState([])
-    const [orderItem, setOrderItem] = useState([])
-    const [cgyMenu, setCgyMenu] = useState([])
-    const [cgyMenuSlice, setCgyMenuSlice] = useState([])
-    const [cgyMenuNum, setCgyMenuNum] = useState(0)
+    const [menukub, setMenukub] = useState([])                  //เมนูที่ดึงมาจาก DB
+    const [orderItem, setOrderItem] = useState([])              //เมนูที่สั่ง
+    const [cgyMenu, setCgyMenu] = useState([])                  //เอาไว้ใช้อะไรก็ได้ที่เกี่ยวกับเมนู แบ่งหมวดหมู่ slice ต่างๆโดยมาจาก menukub
+    const [cgyMenuSlice, setCgyMenuSlice] = useState([])        //เอาไว้ใช้ตอนกดเลขหน้า
+    const [cgyMenuNum, setCgyMenuNum] = useState(0)             //จำนวนของ menukub
     const [totalPrice, setTotalPrice] = useState(0)
-    const [search, setSearch] = useState("")
-    const [pages, setPages] = useState(0)
-    const [pagesLoop, setPagesLoop] = useState([])
+    const [search, setSearch] = useState("")                    //เกี่ยวกับการค้นหาเมนู
+    const [pages, setPages] = useState(0)                       //เกี่ยวกับเลขหน้า
+    const [pagesLoop, setPagesLoop] = useState([])              //เกี่ยวกับเลขหน้า
+    const [foodAmount, setFoodAmount] = useState(0)             //เมื่อเมนูซ้ำ แต่ส่งได้
+    const { tableNo } = useParams()                             // รับค่า tableNo จาก URL
+    const location = useLocation();                             //url
+    const now = new Date()                                      //วันที่
     if (pagesLoop == 1) {
         setPagesLoop([])
     }
-
+    const regex = /\/visitor\/ordermenu\/\d+\/(\d+)/;
+    const match = location.pathname.match(regex);
+    const order_no = match ? match[1] : null;
+    // console.log(location.pathname)
+    // console.log(order_no)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -47,8 +55,6 @@ function ListMenu() {
 
     const newOrderItem = (newOrder) => {
         setOrderItem((prevItem) => {
-            // const existingItem = prevItem.findIndex(item => item.id === prevItem.id)
-            // console.log(existingItem)
             return [...prevItem, newOrder]
         })
     }
@@ -78,7 +84,6 @@ function ListMenu() {
         const itemPage = ((num * (value - 1)))
         const curPages = cgyMenuSlice.slice(itemPage, itemPage + num)
         setCgyMenu(curPages)
-        console.log(curPages)
         window.scrollTo(0, 0)
     }
 
@@ -93,7 +98,6 @@ function ListMenu() {
     const searchMenu = (event) => {
         const nameByChr = event.target.value
         setSearch(nameByChr)
-        console.log(nameByChr)
         setCgyMenu(menukub)
         setFilterMenu(menukub)
     }
@@ -103,7 +107,6 @@ function ListMenu() {
     useEffect(() => {
         const name_menu = cgyMenu.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
         setFilterMenu(name_menu)
-        console.log(filterMenu)
     }, [cgyMenu, search])
 
     useEffect(() => {
@@ -131,24 +134,47 @@ function ListMenu() {
 
     const goToDB = () => {
         console.log(uniqueMenus); // เมนูที่สั่ง อยู่ในนี้
-        
+
         uniqueMenus.forEach((menu) => {
             const orderData = {
-                "order_no": "30", // ใช้ uuid สร้าง UUID สำหรับ order_no
-                "table_no": "15",
-                "food_no": menu.id, 
+                "order_no": order_no, // ใช้ uuid สร้าง UUID สำหรับ order_no
+                "table_no": tableNo,
+                "food_no": menu.id,
                 "food_amount": menu.amount,
                 "order_status": "not_paying",
-                "create_date": new Date().toISOString(),
+                "create_date": new Date(now.getTime() + (7 * 60 * 60 * 1000)),
                 "create_by": "12"
             };
-            
+
             console.log("order to db ----", orderData);
-    
+
             axios.put('http://localhost:3000/auth/orderToDB', orderData)
                 .then(response => {
                     console.log(response.data); // แสดงข้อมูลการตอบกลับจากเซิร์ฟเวอร์
                     // ดำเนินการตามความเหมาะสม เช่น แสดงข้อความบน UI หรือรีเฟรชข้อมูล
+
+                    if (response.data.Status == false) {
+                        axios.get(`http://localhost:3000/auth/orderRepeat?order_no=${order_no}&table_no=${tableNo}&food_no=${menu.id}`, foodAmount)
+                            .then((result) => {
+                                if (result.data.status) {
+                                    setFoodAmount(result.data);
+                                    console.log(result.data)
+                                    console.log(menu.amount + result.data.food_amount)
+                                    let add_orderRepeat = {
+                                        newAmount: Number(menu.amount + result.data.food_amount),
+                                        order_no: order_no,
+                                        table_no: Number(tableNo),
+                                        food_no: menu.id,
+                                        order_status: "not_paying"
+                                    }
+                                    console.log(add_orderRepeat)
+                                    axios.post("http://localhost:3000/auth/add_orderRepeat", add_orderRepeat)
+                                } else {
+                                    alert(result.data.Error);
+                                }
+                            })
+                            .catch((err) => console.log(err));
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error.response.data); // แสดงข้อความข้อผิดพลาดบนคอนโซล
@@ -157,13 +183,11 @@ function ListMenu() {
         });
     };
 
-    const increaseByBtn =(amount,id,text)=>{
-        console.log(id)
-        console.log(amount)
+    const increaseByBtn = (amount, id, text) => {
         setOrderItem(orderItem.map(menu => {
             if (menu.id === id && text == "plus") {
                 return { ...menu, amount: menu.amount + 1 }
-            } else {
+            } else if (menu.id === id && text == "minus") {
                 return { ...menu, amount: menu.amount - 1 }
             }
             return menu
@@ -200,13 +224,28 @@ function ListMenu() {
             <div className='mt-60 max-w-fit p-5'>
                 <div className='m-5'>
                     {uniqueMenus.map(menu => (
-                        <OrderList {...menu} key={uuid()} onDeleteItem={deleteItem} increaseByBtn={increaseByBtn}/>
+                        <OrderList {...menu} key={uuid()} onDeleteItem={deleteItem} increaseByBtn={increaseByBtn} />
                     ))}
                 </div>
                 <div className='m-5 text-center text-4xl w-96'>
-                    <button onClick={goToDB} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
+                    <button onClick={() => document.getElementById('my_modal_4').showModal()} disabled={orderItem.length <= 0} className='btn btn-lg '>Order</button>
                 </div>
             </div>
+            <dialog id="my_modal_4" className="modal">
+                <div className="modal-box w-11/12 max-w-1xl">
+                    <h3 className="font-bold text-lg">ORDER!</h3>
+                    <p className="py-4">จะทำการส่งออเดอร์เลยไหม?</p>
+                    <div className="modal-action">
+                        <form method="dialog">
+                            <button className="btn mr-5">สั่งอาหารต่อ</button>
+                            <Link to={"/visitor"}>
+                                <button className="btn" onClick={goToDB}>สั่งออเดอร์</button>
+                            </Link>
+                            {/* <button className="btn" onClick={goToDB}>สั่งออเดอร์</button> */}
+                        </form>
+                    </div>
+                </div>
+            </dialog>
         </div>
     )
 }
