@@ -66,7 +66,7 @@ function Dashboard() {
     {/* header */}
       <div className="md:container md:mx-auto">
         <h4 className="flex justify-center text-3xl font-bold text-center text-black p-5 bg-gray-100 rounded-lg">
-          ShingburiShabu Dashboard
+          Dashboard
         </h4>
         <div className="flex justify-center">
           <div className="bg-gray-100 w-full p-10 m-3 rounded-lg">
