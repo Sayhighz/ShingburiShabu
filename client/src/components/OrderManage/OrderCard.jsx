@@ -70,7 +70,7 @@ function OrderCard(props) {
       if (result.data.Status) {
         setOrderNo(result.data.orderNo);
       } else {
-        alert(result.data.Error);
+        alert('asdfnj',result.data.Error);
       }
     })
     .catch((err) => console.log(err));

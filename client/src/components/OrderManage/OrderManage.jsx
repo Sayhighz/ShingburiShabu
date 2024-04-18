@@ -9,10 +9,11 @@ function OrderManage() {
     axios
       .get("http://localhost:3000/auth/alltables")
       .then((result) => {
+        console.log(result)
         if (result.data.Status) {
           showTables(result.data.Result);
         } else {
-          alert(result.data.Error);
+          alert("asdmo",result.data.Error);
         }
       })
       .catch((err) => console.log(err));

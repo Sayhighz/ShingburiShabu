@@ -110,8 +110,8 @@ router.get("/table", (req, res) => {
 // show all table
 router.get("/alltables", (req, res) => {
   const sql = `
-    SELECT DISTINCT table_no
-    FROM \`order\`;
+    SELECT *
+    FROM \`table\`;
   `;
   con.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
