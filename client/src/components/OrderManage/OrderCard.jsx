@@ -64,6 +64,8 @@ function OrderCard(props) {
     if (modal) {
       modal.showModal();
     }
+    
+    
   };
 
   axios
@@ -125,10 +127,10 @@ function OrderCard(props) {
 
   const PrintContent = React.forwardRef((props, ref) => (
     <div ref={ref}>
-              <div className="text-center">
-                <div>โต๊ะ: {tableNo}</div>
-                <div>เลขที่บิล: {oldOrderNo}</div>
-              </div>
+      <div className="text-center">
+        <div>โต๊ะ: {tableNo}</div>
+        <div>เลขที่บิล: {oldOrderNo}</div>
+      </div>
       <table className="table table-zebra m-5 text-center">
         <thead className="bg-base-100">
           <tr>
@@ -145,9 +147,7 @@ function OrderCard(props) {
                 <td>{item.name}</td>
                 <td>{item.food_amount}</td>
                 <td>{item.price}</td>
-                <td>
-                  {item.price * item.food_amount}
-                </td>
+                <td>{item.price * item.food_amount}</td>
               </tr>
             ))
           ) : (
@@ -202,15 +202,6 @@ function OrderCard(props) {
               ✕
             </button>
           </form>
-          <h3 className="font-bold text-center">โต๊ะ {tableNo}</h3>
-          <ReactToPrint
-            trigger={() => (
-              <button className="btn btn-outline btn-success m-2">
-                พิมพ์ใบเสร็จ
-              </button>
-            )}
-            content={() => componentRef.current}
-          />
           <div className="grid content-center">
             <div>
               <div className="flex items-center overflow-y-auto">
@@ -242,25 +233,29 @@ function OrderCard(props) {
                   />
                 </div>
               </div>
-              <span className="flex justify-center">
+            </form>
+          </div>
+          <span className="flex justify-center">
+            <ReactToPrint
+              trigger={() => (
                 <button
                   className={`btn btn-outline btn-success m-2 ${
                     isButtonDisabled ? "disabled" : ""
                   }`}
-                  onClick={handleClick2}
                   disabled={isButtonDisabled}
                 >
                   เช็คบิล
                 </button>
-
-                <Link to={`/visitor/ordermenu/${tableNo}/${oldOrderNo}`}>
-                  <button className="btn btn-outline btn-success m-2">
-                    สั่งอาหารเพิ่ม
-                  </button>
-                </Link>
-              </span>
-            </form>
-          </div>
+              )}
+              content={() => componentRef.current}
+              onAfterPrint={handleClick2}
+            />
+            <Link to={`/visitor/ordermenu/${tableNo}/${oldOrderNo}`}>
+              <button className="btn btn-outline btn-success m-2">
+                สั่งอาหารเพิ่ม
+              </button>
+            </Link>
+          </span>
         </div>
       </dialog>
     </>

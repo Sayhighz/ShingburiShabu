@@ -20,13 +20,17 @@ function Login() {
           // Assuming your JWT token has a 'role' claim
           const role = result.data.role;
           const email = result.data.email; // Added line to retrieve email from response
+          const id = result.data.id;
           if (role === "admin") {
-            localStorage.setItem("validAdmin", email); // Store email in localStorage
+            localStorage.setItem("validAdmin", email);
+            // localStorage.setItem("adminId", id); // Store admin ID in localStorage
             navigate("/dashboard");
           } else if (role === "visitor") {
-            localStorage.setItem("validVisitor", email); // Store email in localStorage
+            localStorage.setItem("validVisitor", email);
+            localStorage.setItem("visitorId", id); // Store visitor ID in localStorage
             navigate("/visitor");
-          } else {
+          }
+           else {
             navigate("/");
             alert("You don't have permission");
           }

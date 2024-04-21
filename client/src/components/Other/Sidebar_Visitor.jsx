@@ -26,6 +26,7 @@ const Sidebar_Visitor = () => {
     axios.get("http://localhost:3000/auth/logout").then((result) => {
       if (result.data.Status) {
         localStorage.removeItem("validVisitor")
+        localStorage.removeItem("visitorId")
         anvigate("/");
       }
     });

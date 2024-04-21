@@ -18,6 +18,7 @@ function ListMenu() {
     const [foodAmount, setFoodAmount] = useState(0)             //เมื่อเมนูซ้ำ แต่ส่งได้
     const { tableNo } = useParams()                             // รับค่า tableNo จาก URL
     const location = useLocation();                             //url
+    const [testId, settestId] = useState("");                   // เก็บ id create by
     const now = new Date()                                      //วันที่
     if (pagesLoop == 1) {
         setPagesLoop([])
@@ -28,6 +29,14 @@ function ListMenu() {
     // console.log(location.pathname)
     // console.log(order_no)
     const navigate = useNavigate()
+
+
+    useEffect(() => {
+      // ดึง id จาก localStorage เมื่อคอมโพเนนต์โหลด
+      const id = localStorage.getItem("visitorId");
+      settestId(id); // อัปเดต state สำหรับ id
+    }, []);
+  
 
     useEffect(() => {
         axios.get('http://localhost:3000/auth/menu')
@@ -143,7 +152,7 @@ function ListMenu() {
                 "food_amount": menu.amount,
                 "order_status": "not_paying",
                 "create_date": new Date(now.getTime() + (7 * 60 * 60 * 1000)),
-                "create_by": "12"
+                "create_by": testId
             };
 
             console.log("order to db ----", orderData);
