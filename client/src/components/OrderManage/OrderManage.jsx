@@ -13,7 +13,7 @@ function OrderManage() {
         if (result.data.Status) {
           showTables(result.data.Result);
         } else {
-          alert("asdmo",result.data.Error);
+          alert(result.data.Error);
         }
       })
       .catch((err) => console.log(err));
