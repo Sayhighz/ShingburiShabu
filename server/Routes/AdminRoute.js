@@ -389,7 +389,7 @@ router.get("/newOrderNo", (req, res) => {
   con.query(sql, (err, result) => {
     if (err) return res.json({ Status: false, Error: err.message });
     if (result.length > 0) {
-      const orderNo = result[0].order_no + 1; // เลือก order_no จากอาร์เรย์ของผลลัพธ์แล้วเพิ่ม 1
+      const orderNo = result[0].order_no ; // เลือก order_no จากอาร์เรย์ของผลลัพธ์แล้วเพิ่ม 1
       return res.json({ Status: true, orderNo });
     } else {
       // หากไม่มี order ให้สร้าง order_no แรกเป็น 1

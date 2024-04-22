@@ -9,6 +9,7 @@ function OrderManage() {
     axios
       .get("http://localhost:3000/auth/alltables")
       .then((result) => {
+        console.log(result)
         if (result.data.Status) {
           showTables(result.data.Result);
         } else {

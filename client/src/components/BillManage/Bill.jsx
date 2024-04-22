@@ -10,7 +10,7 @@ function Bill() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth//bill_detail")
+      .get("http://localhost:3000/auth/bill_detail")
       .then((result) => {
         if (result.data.Status) {
           setBill(result.data.Result);
@@ -69,7 +69,7 @@ function Bill() {
               <tr key={b.order_no}>
                 <td>{b.order_no}</td>
                 <td>{b.table_no}</td>
-                <td>{b.status}</td>
+                <td>{b.order_status}</td>
                 <td>{b.date}</td>
                 <td>{b.create_by}</td>
                 <td>
