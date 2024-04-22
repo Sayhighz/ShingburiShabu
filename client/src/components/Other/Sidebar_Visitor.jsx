@@ -94,7 +94,7 @@ const Sidebar_Visitor = () => {
                   <div className="text-white">Account</div>
                 </div>
               </Link>
-            </li>
+            </li> */}
             <li
               onClick={handleLogout}
               className="py-2 flex cursor-pointer mx-5 mr-5"
@@ -105,7 +105,7 @@ const Sidebar_Visitor = () => {
                   <div className="text-white">Logout</div>
                 </div>
               </div>
-            </li> */}
+            </li> 
             <li
               onClick={handleLogout}
               className="py-2 flex cursor-pointer mx-5 mr-5"
