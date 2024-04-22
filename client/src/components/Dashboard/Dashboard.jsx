@@ -120,7 +120,7 @@ function Dashboard() {
               <NewspaperIcon width={100} className="text-gray-500" />
               <div className="stat-value">{orderTotal} บิล</div>
               <div className="stat-desc text-primary-content">
-                <Link to="/dashboard/menu">จัดการบิล</Link>
+                <Link to="/dashboard/bill">จัดการบิล</Link>
               </div>
             </div>
 
