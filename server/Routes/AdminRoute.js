@@ -128,7 +128,7 @@ router.get("/monthlysales", (req, res) => {
         SELECT o.food_no, SUM(o.food_amount * m.price) AS price, o.create_date
         FROM \`order\` o
         INNER JOIN menu m ON o.food_no = m.id
-        WHERE o.create_date IS NOT NULL AND YEAR(o.create_date) = ${year}
+        WHERE o.payment_date IS NOT NULL AND YEAR(o.create_date) = ${year}
         GROUP BY o.food_no, YEAR(o.create_date), MONTH(o.create_date)
     ) AS subquery
     GROUP BY YEAR(create_date), MONTH(create_date)
