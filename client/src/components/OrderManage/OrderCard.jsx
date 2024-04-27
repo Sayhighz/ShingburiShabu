@@ -27,6 +27,7 @@ function OrderCard(props) {
         );
         if (response.data.Status) {
           setOrder(response.data.Result);
+          console.log(response.data)
           setCardColor(
             response.data.Result.length > 0 ? "bg-yellow-500" : "bg-green-500"
           );
@@ -73,6 +74,7 @@ function OrderCard(props) {
     .then((result) => {
       if (result.data.Status) {
         setOrderNo(result.data.orderNo);
+        console.log(result.data)
       } else {
         alert('asdfnj',result.data.Error);
       }
@@ -95,6 +97,7 @@ function OrderCard(props) {
 
   const handleClick = () => {
     if (orderkub.length === 0) {
+      console.log(orderNO)
       navigate(`/visitor/ordermenu/${tableNo}/${orderNO + 1}`);
     } else {
       oldOrderNoFun();

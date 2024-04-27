@@ -26,6 +26,7 @@ function ListMenu() {
     const regex = /\/visitor\/ordermenu\/\d+\/(\d+)/;
     const match = location.pathname.match(regex);
     const order_no = match ? match[1] : null;
+    console.log(order_no)
     // console.log(location.pathname)
     // console.log(order_no)
     const navigate = useNavigate()

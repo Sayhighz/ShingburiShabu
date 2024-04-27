@@ -82,6 +82,7 @@ function Addmenu() {
               <option></option>
               <option>ของหวาน</option>
               <option>ของคาว</option>
+              <option>เครื่องดื่ม</option>
             </select>
 
             <div className="col-12 mb-3 pt-5">
